@@ -18,8 +18,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   StreamSubscription<NotificationEvent>? _subscription;
-  final List<NotificationEvent> _log = [];
-  bool started = false;
+  final List<NotificationEvent> _notificationLogs = [];
+  bool isListening = false;
 
   Reflex reflex = Reflex(
     debug: true,
@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
 
   void onData(NotificationEvent event) {
     setState(() {
-      _log.add(event);
+      _notificationLogs.add(event);
     });
     debugPrint(event.toString());
   }
@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
     try {
       _subscription = reflex.notificationStream!.listen(onData);
       setState(() {
-        started = true;
+        isListening = true;
       });
     } on ReflexException catch (exception) {
       debugPrint(exception.toString());
@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
 
   void stopListening() {
     _subscription?.cancel();
-    setState(() => started = false);
+    setState(() => isListening = false);
   }
 
   @override
@@ -70,26 +70,80 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Reflex Example app'),
         ),
-        body: Center(
-          child: ListView.builder(
-            itemCount: _log.length,
-            itemBuilder: (BuildContext context, int idx) {
-              final entry = _log[idx];
-              return ListTile(
-                title: Text(entry.title ?? ""),
-                subtitle: Text(entry.message ?? ""),
-                trailing: Text(entry.packageName.toString().split('.').last),
-              );
-            },
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: started ? stopListening : startListening,
-          tooltip: 'Start/Stop listening',
-          child:
-              started ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            notificationListener(),
+            autoReply(),
+          ],
         ),
       ),
     );
+  }
+
+  Widget notificationListener() {
+    return SizedBox(
+      height: 400,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 300,
+            child: ListView.builder(
+              itemCount: _notificationLogs.length,
+              itemBuilder: (BuildContext context, int index) {
+                final NotificationEvent element = _notificationLogs[index];
+                return ListTile(
+                  title: Text(element.title ?? ""),
+                  subtitle: Text(element.message ?? ""),
+                  trailing: Text(
+                    element.packageName.toString().split('.').last,
+                  ),
+                );
+              },
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton.icon(
+                icon: isListening
+                    ? const Icon(Icons.stop)
+                    : const Icon(Icons.play_arrow),
+                label: const Text("Reflex Notification Listener"),
+                onPressed: () {
+                  if (isListening) {
+                    stopListening();
+                  } else {
+                    startListening();
+                  }
+                },
+              ),
+              if (_notificationLogs.isNotEmpty)
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                  icon: const Icon(Icons.clear),
+                  label: const Text(
+                    "Clear List",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _notificationLogs.clear();
+                    });
+                  },
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget autoReply() {
+    return const Text("AutoReply");
   }
 }
