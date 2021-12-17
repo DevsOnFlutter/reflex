@@ -9,3 +9,4 @@ for more details.
 */
 
 export 'exception/reflex_exception.dart';
+export 'events/notification_event.dart';

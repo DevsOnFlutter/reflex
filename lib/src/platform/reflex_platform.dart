@@ -10,6 +10,7 @@ for more details.
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:reflex/src/handler/reflex_handler.dart';
+import 'package:reflex/src/helper/events/notification_event.dart';
 
 abstract class ReflexPlatform extends PlatformInterface {
   ReflexPlatform() : super(token: _token);
@@ -26,8 +27,7 @@ abstract class ReflexPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Stream<String> get notificationStream {
-    throw UnimplementedError(
-        'Getter notificationStream has not been implemented');
+  Stream<NotificationEvent>? get notificationStream {
+    throw UnimplementedError('notificationStream has not been implemented');
   }
 }
