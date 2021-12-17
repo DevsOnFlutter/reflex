@@ -12,12 +12,16 @@ package com.devsonflutter.reflex.notification;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import androidx.annotation.RequiresApi;
+
+import com.devsonflutter.reflex.ReflexPlugin;
+import com.devsonflutter.reflex.notification.autoReply.AutoReply;
 
 import io.flutter.Log;
 
@@ -49,6 +53,8 @@ public class NotificationListener extends NotificationListenerService {
         }
 
         sendBroadcast(intent);
+
+        new AutoReply(ReflexPlugin.context).sendReply(notification);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.service.notification.StatusBarNotification;
 
 import androidx.core.app.NotificationCompat;
 
+import com.devsonflutter.reflex.R;
 import com.devsonflutter.reflex.notification.model.App;
 
 import org.json.JSONException;
@@ -98,8 +99,10 @@ public class NotificationHelper {
         try {
             if (!appsList.getBoolean(packageName)) {
                 appsList.put(packageName, true);
-                //Need to create one summary notification, this will help group all individual notifications
-                NotificationCompat.Builder summaryNotificationBuilder = new NotificationCompat.Builder(appContext, "reflex")
+                // Need to create one summary notification,
+                // this will help group all individual notifications
+                NotificationCompat.Builder summaryNotificationBuilder = new
+                        NotificationCompat.Builder(appContext, "reflex")
                         .setGroup("reflex-" + packageName)
                         .setGroupSummary(true)
                         .setAutoCancel(true)

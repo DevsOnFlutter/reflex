@@ -8,6 +8,6 @@ data class NotificationWear(
     val pendingIntent: PendingIntent?,
     val remoteInputs: List<RemoteInput>,
     val bundle: Bundle?,
-    val tag: String?, // Tag can be null for some notifications
+    val tag: String?,
     val id: String
 )

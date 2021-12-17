@@ -24,7 +24,7 @@ public class ReflexPlugin implements FlutterPlugin {
 
   /* ------------- Native Variables -------------- */
   @SuppressLint("StaticFieldLeak")
-  private static Context context = null;
+  public static Context context = null;
 
   private BinaryMessenger binaryMessenger = null;
 

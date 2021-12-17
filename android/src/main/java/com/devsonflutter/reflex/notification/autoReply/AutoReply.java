@@ -17,14 +17,14 @@ import com.devsonflutter.reflex.notification.ReflexNotification;
 
 public class AutoReply {
 
-    AutoReply(Context context) {
+    public AutoReply(Context context) {
         this.context = context;
     }
 
     private final Context context;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void sendReply(StatusBarNotification sbn){
+    public void sendReply(StatusBarNotification sbn){
         NotificationWear notificationWear = ReflexNotification.extractWearNotification(sbn);
         if (notificationWear.getRemoteInputs().isEmpty()) {
             return;
@@ -40,7 +40,7 @@ public class AutoReply {
         for (RemoteInput remoteIn : notificationWear.getRemoteInputs()) {
             remoteInputs[i] = remoteIn;
             // This works. Might need additional parameter to make it for Hangouts? (notification_tag?)
-            localBundle.putCharSequence(remoteInputs[i].getResultKey(), "Hii");
+            localBundle.putCharSequence(remoteInputs[i].getResultKey(), "[Reflex] Auto Reply");
             i++;
         }
 
@@ -58,6 +58,5 @@ public class AutoReply {
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }
-
     }
 }
