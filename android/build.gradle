@@ -33,3 +33,7 @@ android {
         minSdkVersion 16
     }
 }
+
+dependencies {
+    implementation 'org.jetbrains:annotations:15.0'
+}
