@@ -1,5 +1,6 @@
 package com.devsonflutter.reflex.notification.autoReply;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -16,6 +17,12 @@ import com.devsonflutter.reflex.notification.ReflexNotification;
 
 public class AutoReply {
 
+    AutoReply(Context context) {
+        this.context = context;
+    }
+
+    private final Context context;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void sendReply(StatusBarNotification sbn){
         NotificationWear notificationWear = ReflexNotification.extractWearNotification(sbn);
@@ -27,7 +34,8 @@ public class AutoReply {
 
         Intent localIntent = new Intent();
         localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Bundle localBundle = new Bundle();//notificationWear.bundle;
+        // NotificationWear.bundle
+        Bundle localBundle = new Bundle();
         int i = 0;
         for (RemoteInput remoteIn : notificationWear.getRemoteInputs()) {
             remoteInputs[i] = remoteIn;
@@ -39,9 +47,16 @@ public class AutoReply {
         RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle);
         try {
             if (notificationWear.getPendingIntent() != null){
-                notificationWear.getPendingIntent().send(this,0,localIntent);
-                NotificationHelper.getInstance(getApplicationContext()).sendNotification(sbn.getNotification().extras.getString("android.title"), sbn.getNotification().extras.getString("android.text"), sbn.getPackageName());
+                notificationWear.getPendingIntent().send(context,0,localIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    NotificationHelper.getInstance(context).sendNotification(sbn.getNotification()
+                            .extras.getString("android.title"),
+                            sbn.getNotification().extras.getString("android.text"),
+                            sbn.getPackageName());
+                }
             }
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
         }
 
     }
