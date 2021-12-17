@@ -17,10 +17,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Reflex? _reflex;
   StreamSubscription<NotificationEvent>? _subscription;
   final List<NotificationEvent> _log = [];
   bool started = false;
+
+  Reflex reflex = Reflex(
+    debug: true,
+    autoReply: AutoReply(
+      packageName: "com.whatsapp",
+      message: "Hello",
+    ),
+  );
 
   @override
   void initState() {
@@ -41,9 +48,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void startListening() {
-    _reflex = Reflex();
     try {
-      _subscription = _reflex!.notificationStream!.listen(onData);
+      _subscription = reflex.notificationStream!.listen(onData);
       setState(() {
         started = true;
       });

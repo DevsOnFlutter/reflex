@@ -18,3 +18,14 @@ class ReflexException implements Exception {
     return "ReflexException: $message";
   }
 }
+
+class ReflexNullException implements Exception {
+  String message;
+
+  ReflexNullException(this.message);
+
+  @override
+  String toString() {
+    return "ReflexNullException: $message";
+  }
+}

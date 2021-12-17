@@ -22,6 +22,9 @@ import com.devsonflutter.reflex.notification.NotificationReceiver;
 import com.devsonflutter.reflex.notification.ReflexNotification;
 import com.devsonflutter.reflex.permission.NotificationPermission;
 
+import java.util.HashMap;
+import java.util.List;
+
 import io.flutter.Log;
 import io.flutter.plugin.common.EventChannel;
 
@@ -41,6 +44,7 @@ public class EventCallHandler implements EventChannel.StreamHandler {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onListen(Object arguments, EventChannel.EventSink events) {
+        Log.w(TAG,arguments.toString());
         mEventSink = events;
         listenNotification(mEventSink);
         Log.w(TAG,"Listening Reflex Stream...");

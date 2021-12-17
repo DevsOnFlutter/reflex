@@ -11,20 +11,23 @@ for more details.
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:reflex/src/handler/reflex_handler.dart';
 import 'package:reflex/src/helper/events/notification_event.dart';
+import 'package:reflex/src/helper/helper.dart';
 
 abstract class ReflexPlatform extends PlatformInterface {
   ReflexPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static ReflexPlatform _instance = ReflexHandler();
+  static final ReflexPlatform _instance = ReflexHandler();
 
   /// returns the instance of the [ReflexHandler].
   static ReflexPlatform get instance => _instance;
 
-  static set instance(ReflexPlatform instance) {
-    PlatformInterface.verifyToken(instance, _token);
-    _instance = instance;
+  void init({
+    required bool debug,
+    AutoReply? autoReply,
+  }) {
+    throw UnimplementedError('init has not been implemented for reflex.');
   }
 
   Stream<NotificationEvent>? get notificationStream {

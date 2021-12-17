@@ -13,6 +13,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:reflex/src/helper/events/notification_event.dart';
 import 'package:reflex/src/helper/exception/reflex_exception.dart';
+import 'package:reflex/src/helper/helper.dart';
 import 'package:reflex/src/platform/reflex_platform.dart';
 
 class ReflexHandler extends ReflexPlatform {
@@ -25,13 +26,28 @@ class ReflexHandler extends ReflexPlatform {
 
   Stream<NotificationEvent>? _notificationStream;
 
+  late final List<dynamic> arguments;
+
+  @override
+  void init({
+    required bool debug,
+    AutoReply? autoReply,
+  }) {
+    Map<String, dynamic> map = {
+      "debug": debug,
+      "autoReply": autoReply?.deserialize(),
+    };
+    arguments = [map];
+  }
+
   @override
   Stream<NotificationEvent>? get notificationStream {
     if (Platform.isAndroid) {
-      _notificationStream ??=
-          _eventChannel.receiveBroadcastStream().map<NotificationEvent>(
-                (event) => NotificationEvent.getNotificationEventFromMap(event),
-              );
+      _notificationStream ??= _eventChannel
+          .receiveBroadcastStream(arguments)
+          .map<NotificationEvent>(
+            (event) => NotificationEvent.getNotificationEventFromMap(event),
+          );
       return _notificationStream;
     }
     throw ReflexException('notificationStream is only supported on Android!');
