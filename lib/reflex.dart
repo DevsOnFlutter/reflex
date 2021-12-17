@@ -1,13 +1,12 @@
-
 import 'dart:async';
 
-import 'package:flutter/services.dart';
+import 'package:reflex/src/platform/reflex_platform.dart';
+
+export 'package:reflex/src/helper/helper.dart';
 
 class Reflex {
-  static const MethodChannel _channel = MethodChannel('reflex');
-
-  static Future<String?> get platformVersion async {
-    final String? version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  /// [notificationStream] returns stream of notifications.
+  Stream<String> get notificationStream {
+    return ReflexPlatform.instance.notificationStream;
   }
 }
