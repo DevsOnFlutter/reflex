@@ -44,11 +44,14 @@ public class EventCallHandler implements EventChannel.StreamHandler {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onListen(Object arguments, EventChannel.EventSink events) {
-//        List<Map<String, String>> list = (List<Map<String, String>>) arguments;
         List<Map<String, Object>> list = (List<Map<String, Object>>) arguments;
 
         Map<String, Object> map = (Map<String, Object>) list.get(0);
+        Boolean debug = (Boolean) map.get("debug");
+        List<String> packageNameList = (List<String>) map.get("packageNameList");
         Map<String, String> autoReply = (Map<String,String>) map.get("autoReply");
+
+        ReflexPlugin.packageNameList = packageNameList;
 
         mEventSink = events;
         listenNotification(mEventSink);

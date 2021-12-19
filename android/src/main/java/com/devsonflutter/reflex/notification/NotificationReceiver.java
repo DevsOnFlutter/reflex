@@ -15,8 +15,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build.VERSION_CODES;
 import androidx.annotation.RequiresApi;
+
+import com.devsonflutter.reflex.ReflexPlugin;
+
 import io.flutter.plugin.common.EventChannel.EventSink;
 import java.util.HashMap;
+import java.util.List;
 
 /* Notification Receiver */
 public class NotificationReceiver extends BroadcastReceiver {
@@ -39,7 +43,17 @@ public class NotificationReceiver extends BroadcastReceiver {
         data.put("packageName", packageName);
         data.put("title", title);
         data.put("message", message);
-        eventSink.success(data);
+
+        List<String> packageNameList = ReflexPlugin.packageNameList;
+        if(packageNameList != null) {
+            if(packageNameList.contains(packageName))
+            {
+                eventSink.success(data);
+            }
+        } else {
+            eventSink.success(data);
+        }
+
     }
 }
 

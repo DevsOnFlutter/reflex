@@ -15,6 +15,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
@@ -60,6 +62,13 @@ public class ReflexPlugin implements FlutterPlugin {
     return TAG;
   }
   /* ------------- Plugin Logging TAG -------------- */
+
+  /* ------------- Flutter Variables -------------- */
+  static Boolean debug;
+  public static List<String> packageNameList;
+
+  /* ------------- Flutter Variables -------------- */
+
 
   private void setupChannel(BinaryMessenger messenger, Context context) {
 //    methodChannel = new MethodChannel(binaryMessenger, CHANNEL_ID);

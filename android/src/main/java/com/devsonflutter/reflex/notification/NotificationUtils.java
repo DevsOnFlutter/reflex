@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
 import com.devsonflutter.reflex.notification.model.App;
+import com.devsonflutter.reflex.notification.model.NotificationWear;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,7 +31,7 @@ public class NotificationUtils {
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public static  NotificationWear extractWearNotification(StatusBarNotification sbn){
+    public static NotificationWear extractWearNotification(StatusBarNotification sbn){
         Notification notification = sbn.getNotification();
         Bundle bundle = new Bundle();
         NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender(notification);
@@ -59,8 +60,6 @@ public class NotificationUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static boolean isNewNotification(StatusBarNotification sbn) {
-        //For apps targeting {@link android.os.Build.VERSION_CODES#N} and above, this time is not shown
-        //by default unless explicitly set by the apps hence checking not 0
         return sbn.getNotification().when == 0 ||
                 (System.currentTimeMillis() - sbn.getNotification().when) < MAX_OLD_NOTIFICATION_CAN_BE_REPLIED_TIME_MS;
     }
@@ -94,6 +93,7 @@ public class NotificationUtils {
         return title;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getTitleRaw(StatusBarNotification sbn) {
         return sbn.getNotification().extras.getString("android.title");
     }

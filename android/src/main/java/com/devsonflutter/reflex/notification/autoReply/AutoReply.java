@@ -14,10 +14,8 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.RemoteInput;
 
-import com.devsonflutter.reflex.ReflexPlugin;
-import com.devsonflutter.reflex.notification.NotificationHelper;
 import com.devsonflutter.reflex.notification.NotificationUtils;
-import com.devsonflutter.reflex.notification.NotificationWear;
+import com.devsonflutter.reflex.notification.model.NotificationWear;
 
 public class AutoReply {
 
@@ -62,20 +60,15 @@ public class AutoReply {
         }
 
         RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle);
+
         try {
-            if (notificationWear.getPendingIntent() != null){
-                notificationWear.getPendingIntent().send(context,0,localIntent);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    Log.d("[Reflex]","Notification Helper Send Notification Called from Send Reply...");
-                    NotificationHelper.getInstance(context).sendNotification(sbn.getNotification()
-                                    .extras.getString("android.title"),
-                            sbn.getNotification().extras.getString("android.text"),
-                            sbn.getPackageName());
-                    Log.d("[Reflex]","Sent Successfully...");
-                }
+            if (notificationWear.getPendingIntent() != null) {
+                Log.d("[Reflex]", notificationWear.getPendingIntent().toString());
+                notificationWear.getPendingIntent().send(context, 0, localIntent);
+                Log.d("[Reflex]","Sent Successfully...");
             }
         } catch (PendingIntent.CanceledException e) {
-            Log.d("[Reflex]","Error Caught while Notification Helper Send Notification...");
+            Log.d("[Reflex]","notificationWear pending intent send...");
             e.printStackTrace();
         }
     }

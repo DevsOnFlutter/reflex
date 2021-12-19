@@ -20,6 +20,7 @@ class Reflex {
   /// [Reflex] Constructor
   Reflex({
     this.debug = false,
+    this.packageNameList,
     this.autoReply,
   }) {
     init();
@@ -27,12 +28,17 @@ class Reflex {
 
   final bool debug;
   final AutoReply? autoReply;
+  final List<String>? packageNameList;
   late final ReflexPlatform reflexPlatform;
 
   // Initialize [ReflexPlatform] with [debug] and [autoReply]
   void init() {
     reflexPlatform = ReflexPlatform.instance;
-    reflexPlatform.init(debug: debug, autoReply: autoReply);
+    reflexPlatform.init(
+      debug: debug,
+      packageNameList: packageNameList,
+      autoReply: autoReply,
+    );
   }
 
   /// [notificationStream] returns stream of notifications.

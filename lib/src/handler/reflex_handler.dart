@@ -31,10 +31,12 @@ class ReflexHandler extends ReflexPlatform {
   @override
   void init({
     required bool debug,
+    List<String>? packageNameList,
     AutoReply? autoReply,
   }) {
     Map<String, dynamic> map = {
       "debug": debug,
+      "packageNameList": packageNameList,
       "autoReply": autoReply?.deserialize(),
     };
     arguments = [map];
