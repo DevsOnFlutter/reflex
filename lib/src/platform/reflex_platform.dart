@@ -26,6 +26,7 @@ abstract class ReflexPlatform extends PlatformInterface {
   void init({
     required bool debug,
     List<String>? packageNameList,
+    List<String>? packageNameExceptionList,
     AutoReply? autoReply,
   }) {
     throw UnimplementedError('init has not been implemented for reflex.');

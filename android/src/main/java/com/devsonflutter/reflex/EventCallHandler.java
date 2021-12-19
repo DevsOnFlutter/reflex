@@ -49,9 +49,11 @@ public class EventCallHandler implements EventChannel.StreamHandler {
         Map<String, Object> map = (Map<String, Object>) list.get(0);
         Boolean debug = (Boolean) map.get("debug");
         List<String> packageNameList = (List<String>) map.get("packageNameList");
+        List<String> packageNameExceptionList = (List<String>) map.get("packageNameExceptionList");
         Map<String, String> autoReply = (Map<String,String>) map.get("autoReply");
 
         ReflexPlugin.packageNameList = packageNameList;
+        ReflexPlugin.packageNameExceptionList = packageNameExceptionList;
 
         mEventSink = events;
         listenNotification(mEventSink);

@@ -21,6 +21,7 @@ class Reflex {
   Reflex({
     this.debug = false,
     this.packageNameList,
+    this.packageNameExceptionList,
     this.autoReply,
   }) {
     init();
@@ -29,6 +30,7 @@ class Reflex {
   final bool debug;
   final AutoReply? autoReply;
   final List<String>? packageNameList;
+  final List<String>? packageNameExceptionList;
   late final ReflexPlatform reflexPlatform;
 
   // Initialize [ReflexPlatform] with [debug] and [autoReply]
@@ -37,6 +39,7 @@ class Reflex {
     reflexPlatform.init(
       debug: debug,
       packageNameList: packageNameList,
+      packageNameExceptionList: packageNameExceptionList,
       autoReply: autoReply,
     );
   }

@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:reflex/src/helper/events/notification_event.dart';
 import 'package:reflex/src/helper/exception/reflex_exception.dart';
 import 'package:reflex/src/helper/helper.dart';
+import 'package:reflex/src/helper/utils/reflex_utils.dart';
 import 'package:reflex/src/platform/reflex_platform.dart';
 
 class ReflexHandler extends ReflexPlatform {
@@ -32,11 +33,19 @@ class ReflexHandler extends ReflexPlatform {
   void init({
     required bool debug,
     List<String>? packageNameList,
+    List<String>? packageNameExceptionList,
     AutoReply? autoReply,
   }) {
+    // throw exception if package
+    if (packageNameList != null && packageNameExceptionList != null) {
+      ReflexUtils.checkConflictingPackageNames(
+          packageNameList, packageNameExceptionList);
+    }
+
     Map<String, dynamic> map = {
       "debug": debug,
       "packageNameList": packageNameList,
+      "packageNameExceptionList": packageNameExceptionList,
       "autoReply": autoReply?.deserialize(),
     };
     arguments = [map];

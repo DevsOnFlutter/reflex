@@ -23,7 +23,8 @@ class _MyAppState extends State<MyApp> {
 
   Reflex reflex = Reflex(
     debug: true,
-    packageNameList: ["com.facebook"],
+    packageNameList: ["com.whatsapp", "com.tyup"],
+    packageNameExceptionList: ["com.facebook"],
     autoReply: AutoReply(
       packageName: "com.whatsapp",
       message: "Hello",

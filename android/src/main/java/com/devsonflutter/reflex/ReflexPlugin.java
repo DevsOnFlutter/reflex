@@ -66,6 +66,7 @@ public class ReflexPlugin implements FlutterPlugin {
   /* ------------- Flutter Variables -------------- */
   static Boolean debug;
   public static List<String> packageNameList;
+  public static List<String> packageNameExceptionList;
 
   /* ------------- Flutter Variables -------------- */
 

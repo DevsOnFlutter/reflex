@@ -44,16 +44,22 @@ public class NotificationReceiver extends BroadcastReceiver {
         data.put("title", title);
         data.put("message", message);
 
+        boolean sendData = false;
+
         List<String> packageNameList = ReflexPlugin.packageNameList;
+        List<String> packageNameExceptionList = ReflexPlugin.packageNameExceptionList;
+
         if(packageNameList != null) {
-            if(packageNameList.contains(packageName))
-            {
-                eventSink.success(data);
+            if(packageNameList.contains(packageName)) {
+                sendData = true;
             }
         } else {
-            eventSink.success(data);
+            sendData = true;
         }
 
+        if(sendData) {
+            eventSink.success(data);
+        }
     }
 }
 
