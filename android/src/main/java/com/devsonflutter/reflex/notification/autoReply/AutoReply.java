@@ -14,6 +14,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.RemoteInput;
 
+import com.devsonflutter.reflex.ReflexPlugin;
 import com.devsonflutter.reflex.notification.NotificationUtils;
 import com.devsonflutter.reflex.notification.model.NotificationWear;
 
@@ -25,6 +26,9 @@ public class AutoReply {
 
     private final Context context;
 
+    private static final String TAG = ReflexPlugin.getPluginTag();
+    private static final boolean debug = ReflexPlugin.debug;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sendReply(StatusBarNotification sbn){
         if (canReply(sbn)) {
@@ -34,16 +38,12 @@ public class AutoReply {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void reply(StatusBarNotification sbn) {
-        Log.d("[Reflex]","Replying...");
         NotificationWear notificationWear = NotificationUtils.extractWearNotification(sbn);
-        Log.d("[Reflex]","Notification Wear Created...");
         if (notificationWear.getRemoteInputs().isEmpty()) {
-            Log.d("[Reflex]","Remote Inputs Empty Returning...");
             return;
         }
 
         RemoteInput[] remoteInputs = new RemoteInput[notificationWear.getRemoteInputs().size()];
-        Log.d("[Reflex]","Remote Inputs Created...");
 
         Intent localIntent = new Intent();
         localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -52,10 +52,8 @@ public class AutoReply {
         int i = 0;
         for (RemoteInput remoteIn : notificationWear.getRemoteInputs()) {
             remoteInputs[i] = remoteIn;
-            Log.d("[Reflex]","Remote Inputs " + i + remoteIn.toString());
             // This works. Might need additional parameter to make it for Hangouts? (notification_tag?)
             localBundle.putCharSequence(remoteInputs[i].getResultKey(), "[Reflex] Auto Reply");
-            Log.d("[Reflex]","Auto Reply Sent...");
             i++;
         }
 
@@ -63,12 +61,13 @@ public class AutoReply {
 
         try {
             if (notificationWear.getPendingIntent() != null) {
-                Log.d("[Reflex]", notificationWear.getPendingIntent().toString());
                 notificationWear.getPendingIntent().send(context, 0, localIntent);
-                Log.d("[Reflex]","Sent Successfully...");
+                if(debug) {
+                    Log.d(TAG, "Auto Reply Sent Successfully...");
+                }
             }
         } catch (PendingIntent.CanceledException e) {
-            Log.d("[Reflex]","notificationWear pending intent send...");
+            Log.e(TAG, "PendingIntent.CanceledException: " + e.getMessage());
             e.printStackTrace();
         }
     }

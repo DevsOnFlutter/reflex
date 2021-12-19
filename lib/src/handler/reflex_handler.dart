@@ -48,6 +48,7 @@ class ReflexHandler extends ReflexPlatform {
       "packageNameExceptionList": packageNameExceptionList,
       "autoReply": autoReply?.deserialize(),
     };
+
     arguments = [map];
   }
 

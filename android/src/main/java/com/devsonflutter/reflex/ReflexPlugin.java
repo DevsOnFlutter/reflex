@@ -64,12 +64,11 @@ public class ReflexPlugin implements FlutterPlugin {
   /* ------------- Plugin Logging TAG -------------- */
 
   /* ------------- Flutter Variables -------------- */
-  static Boolean debug;
+  public static boolean debug;
   public static List<String> packageNameList;
   public static List<String> packageNameExceptionList;
 
   /* ------------- Flutter Variables -------------- */
-
 
   private void setupChannel(BinaryMessenger messenger, Context context) {
 //    methodChannel = new MethodChannel(binaryMessenger, CHANNEL_ID);

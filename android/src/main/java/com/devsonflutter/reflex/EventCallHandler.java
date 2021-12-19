@@ -44,26 +44,35 @@ public class EventCallHandler implements EventChannel.StreamHandler {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onListen(Object arguments, EventChannel.EventSink events) {
+        mEventSink = events;
+
+        // Get arguments from flutter side
         List<Map<String, Object>> list = (List<Map<String, Object>>) arguments;
+        Map<String, Object> args = (Map<String, Object>) list.get(0);
 
-        Map<String, Object> map = (Map<String, Object>) list.get(0);
-        Boolean debug = (Boolean) map.get("debug");
-        List<String> packageNameList = (List<String>) map.get("packageNameList");
-        List<String> packageNameExceptionList = (List<String>) map.get("packageNameExceptionList");
-        Map<String, String> autoReply = (Map<String,String>) map.get("autoReply");
+        boolean debug = Boolean.parseBoolean(String.valueOf(args.get("debug")));
+        List<String> packageNameList = (List<String>) args.get("packageNameList");
+        List<String> packageNameExceptionList = (List<String>) args.get("packageNameExceptionList");
+        Map<String, String> autoReply = (Map<String,String>) args.get("autoReply");
 
+        ReflexPlugin.debug = debug;
         ReflexPlugin.packageNameList = packageNameList;
         ReflexPlugin.packageNameExceptionList = packageNameExceptionList;
 
-        mEventSink = events;
+        // Start listening notification
         listenNotification(mEventSink);
-        Log.w(TAG,"Listening Reflex Stream...");
+
+        if(debug) {
+            Log.i(TAG,"Listening Reflex Stream...");
+        }
     }
 
     @Override
     public void onCancel(Object arguments) {
         mEventSink = null;
-        Log.w(TAG,"Closing Reflex Stream...");
+        if(ReflexPlugin.debug) {
+            Log.i(TAG,"Closing Reflex Stream...");
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -79,10 +88,15 @@ public class EventCallHandler implements EventChannel.StreamHandler {
             // Listener intent
             Intent intent = new Intent(context, NotificationListener.class);
             context.startService(intent);
-            Log.i(TAG, "Started the notification tracking service.");
+
+            if (ReflexPlugin.debug)
+            {
+                Log.i(TAG, "Notification Listening Service Started...");
+            }
+
         } else {
             notificationPermission.requestPermission();
-            Log.e(TAG, "Failed to start notification tracking; Permissions were not yet granted.");
+            Log.e(TAG, "Failed to start notification listener; Permission not granted.");
         }
     }
 }

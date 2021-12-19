@@ -29,18 +29,22 @@ import io.flutter.Log;
 @SuppressLint("OverrideAbstract")
 public class NotificationListener extends NotificationListenerService {
 
+    private static final String TAG = ReflexPlugin.getPluginTag();
+    private static final boolean debug = ReflexPlugin.debug;
+
+
     @RequiresApi(api = VERSION_CODES.N)
     @Override
     public void onNotificationPosted(StatusBarNotification notification) {
-        Log.d("[Reflex]","Notification Received!");
-
         // Package name as title
         String packageName = notification.getPackageName();
-        Log.d("[Reflex]","Notification From: " + packageName);
+        if(debug)
+        {
+            Log.d(TAG,"Notification Received From: " + packageName);
+        }
 
         // Extra Payload
         Bundle extras = notification.getNotification().extras;
-        Log.d("[Reflex]","Extras: " + extras.toString());
 
         Intent intent = new Intent(NotificationUtils.NOTIFICATION_INTENT);
         intent.putExtra(NotificationUtils.NOTIFICATION_PACKAGE_NAME, packageName);
@@ -51,11 +55,15 @@ public class NotificationListener extends NotificationListenerService {
         if(title==null) {
            title = "Untitled Notification";
         }
+
         if(text == null){
             text = "No message!";
         }
+
         intent.putExtra(NotificationUtils.NOTIFICATION_TITLE, title.toString());
         intent.putExtra(NotificationUtils.NOTIFICATION_MESSAGE, text.toString());
+
+        // Notification Receiver listens to this broadcast
         sendBroadcast(intent);
 
         new AutoReply(ReflexPlugin.context).sendReply(notification);

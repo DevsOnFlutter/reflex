@@ -19,7 +19,7 @@ export 'package:reflex/src/helper/helper.dart';
 class Reflex {
   /// [Reflex] Constructor
   Reflex({
-    this.debug = false,
+    this.debug = true,
     this.packageNameList,
     this.packageNameExceptionList,
     this.autoReply,
@@ -27,6 +27,7 @@ class Reflex {
     init();
   }
 
+  /// [debug] logs on the terminal.
   final bool debug;
   final AutoReply? autoReply;
   final List<String>? packageNameList;
