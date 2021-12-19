@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   Reflex reflex = Reflex(
     debug: true,
     packageNameList: ["com.whatsapp", "com.tyup"],
-    packageNameExceptionList: ["com.facebook"],
+    packageNameExceptionList: ["com.miui.securitycenter"],
     autoReply: AutoReply(
       packageName: "com.whatsapp",
       message: "Hello",

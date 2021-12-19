@@ -48,9 +48,14 @@ public class NotificationListener extends NotificationListenerService {
         CharSequence title = extras.getCharSequence(Notification.EXTRA_TITLE);
         CharSequence text = extras.getCharSequence(Notification.EXTRA_TEXT);
 
+        if(title==null) {
+           title = "Untitled Notification";
+        }
+        if(text == null){
+            text = "No message!";
+        }
         intent.putExtra(NotificationUtils.NOTIFICATION_TITLE, title.toString());
         intent.putExtra(NotificationUtils.NOTIFICATION_MESSAGE, text.toString());
-
         sendBroadcast(intent);
 
         new AutoReply(ReflexPlugin.context).sendReply(notification);

@@ -49,12 +49,17 @@ public class NotificationReceiver extends BroadcastReceiver {
         List<String> packageNameList = ReflexPlugin.packageNameList;
         List<String> packageNameExceptionList = ReflexPlugin.packageNameExceptionList;
 
-        if(packageNameList != null) {
+
+        if(packageNameList == null && packageNameExceptionList== null){
+            sendData = true;
+        }
+        else if(packageNameList != null) {
             if(packageNameList.contains(packageName)) {
                 sendData = true;
             }
-        } else {
-            sendData = true;
+        }
+        else {
+            sendData = !packageNameExceptionList.contains(packageName);
         }
 
         if(sendData) {
