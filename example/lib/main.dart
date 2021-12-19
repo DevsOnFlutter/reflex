@@ -76,10 +76,30 @@ class _MyAppState extends State<MyApp> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             notificationListener(),
+            permissions(),
             autoReply(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget permissions() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+          child: const Text("See Permission"),
+          onPressed: () async {
+            bool isPermissionGranted = await Reflex.isPermissionGranted;
+            debugPrint("Notification Permission: $isPermissionGranted");
+          },
+        ),
+        ElevatedButton(
+          child: const Text("Request Permission"),
+          onPressed: () async {},
+        ),
+      ],
     );
   }
 

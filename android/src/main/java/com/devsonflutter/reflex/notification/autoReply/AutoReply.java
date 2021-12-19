@@ -27,7 +27,6 @@ public class AutoReply {
     private final Context context;
 
     private static final String TAG = ReflexPlugin.getPluginTag();
-    private static final boolean debug = ReflexPlugin.debug;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sendReply(StatusBarNotification sbn){
@@ -62,9 +61,7 @@ public class AutoReply {
         try {
             if (notificationWear.getPendingIntent() != null) {
                 notificationWear.getPendingIntent().send(context, 0, localIntent);
-                if(debug) {
-                    Log.d(TAG, "Auto Reply Sent Successfully...");
-                }
+                ReflexPlugin.debugPrint("Auto Reply Sent Successfully...");
             }
         } catch (PendingIntent.CanceledException e) {
             Log.e(TAG, "PendingIntent.CanceledException: " + e.getMessage());

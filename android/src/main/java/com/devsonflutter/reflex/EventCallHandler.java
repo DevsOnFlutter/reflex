@@ -62,17 +62,13 @@ public class EventCallHandler implements EventChannel.StreamHandler {
         // Start listening notification
         listenNotification(mEventSink);
 
-        if(debug) {
-            Log.i(TAG,"Listening Reflex Stream...");
-        }
+        ReflexPlugin.debugPrint("Listening Reflex Stream...");
     }
 
     @Override
     public void onCancel(Object arguments) {
         mEventSink = null;
-        if(ReflexPlugin.debug) {
-            Log.i(TAG,"Closing Reflex Stream...");
-        }
+        ReflexPlugin.debugPrint("Closing Reflex Stream...");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -89,11 +85,7 @@ public class EventCallHandler implements EventChannel.StreamHandler {
             Intent intent = new Intent(context, NotificationListener.class);
             context.startService(intent);
 
-            if (ReflexPlugin.debug)
-            {
-                Log.i(TAG, "Notification Listening Service Started...");
-            }
-
+            ReflexPlugin.debugPrint("Notification Listening Service Started...");
         } else {
             notificationPermission.requestPermission();
             Log.e(TAG, "Failed to start notification listener; Permission not granted.");

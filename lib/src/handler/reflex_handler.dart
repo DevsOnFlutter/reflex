@@ -18,11 +18,12 @@ import 'package:reflex/src/helper/utils/reflex_utils.dart';
 import 'package:reflex/src/platform/reflex_platform.dart';
 
 class ReflexHandler extends ReflexPlatform {
-  // static const MethodChannel _methodChannel = MethodChannel('reflex');
+  static const MethodChannel _methodChannel =
+      MethodChannel('reflex_method_channel');
 
   final EventChannel _eventChannel = const EventChannel('reflex_event_channel');
 
-  // MethodChannel get methodChannel => _methodChannel;
+  MethodChannel get methodChannel => _methodChannel;
   EventChannel get eventChannel => _eventChannel;
 
   Stream<NotificationEvent>? _notificationStream;
@@ -63,5 +64,13 @@ class ReflexHandler extends ReflexPlatform {
       return _notificationStream;
     }
     throw ReflexException('notificationStream is only supported on Android!');
+  }
+
+  @override
+  Future<bool> get isPermissionGranted async {
+    bool? result =
+        (await _methodChannel.invokeMethod<bool>('isPermissionGranted')) ??
+            false;
+    return result;
   }
 }

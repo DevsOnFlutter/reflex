@@ -32,7 +32,7 @@ class Reflex {
   final AutoReply? autoReply;
   final List<String>? packageNameList;
   final List<String>? packageNameExceptionList;
-  late final ReflexPlatform reflexPlatform;
+  static late final ReflexPlatform reflexPlatform;
 
   // Initialize [ReflexPlatform] with [debug] and [autoReply]
   void init() {
@@ -48,5 +48,9 @@ class Reflex {
   /// [notificationStream] returns stream of notifications.
   Stream<NotificationEvent>? get notificationStream {
     return reflexPlatform.notificationStream;
+  }
+
+  static Future<bool> get isPermissionGranted async {
+    return reflexPlatform.isPermissionGranted;
   }
 }

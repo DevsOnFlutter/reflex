@@ -12,6 +12,7 @@ package com.devsonflutter.reflex;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.MethodChannel;
 
 /* ReflexPlugin */
 public class ReflexPlugin implements FlutterPlugin {
@@ -30,8 +32,8 @@ public class ReflexPlugin implements FlutterPlugin {
 
   private BinaryMessenger binaryMessenger = null;
 
-//  private MethodChannel methodChannel;
-//  private MethodCallHandlerImplementation methodHandler;
+  private MethodChannel methodChannel;
+  private MethodCallHandler methodHandler;
 
   @SuppressLint("StaticFieldLeak")
   private static EventCallHandler eventHandler;
@@ -67,26 +69,34 @@ public class ReflexPlugin implements FlutterPlugin {
   public static boolean debug;
   public static List<String> packageNameList;
   public static List<String> packageNameExceptionList;
-
   /* ------------- Flutter Variables -------------- */
 
+  /* ------------- Utility Functions -------------- */
+  static public void debugPrint(String message) {
+    if(debug) {
+      Log.d(TAG,message);
+    }
+  }
+  /* ------------- Utility Functions -------------- */
+
+
   private void setupChannel(BinaryMessenger messenger, Context context) {
-//    methodChannel = new MethodChannel(binaryMessenger, CHANNEL_ID);
+    methodChannel = new MethodChannel(binaryMessenger, CHANNEL_ID);
     eventChannel = new EventChannel(binaryMessenger,STREAM_ID);
 
-//    methodHandler = new MethodCallHandlerImplementation();
+    methodHandler = new MethodCallHandler();
     eventHandler = new EventCallHandler(context);
 
-//    methodChannel.setMethodCallHandler(methodHandler);
+    methodChannel.setMethodCallHandler(methodHandler);
     eventChannel.setStreamHandler(eventHandler);
   }
 
   private void teardownChannel() {
-//    methodChannel.setMethodCallHandler(null);
+    methodChannel.setMethodCallHandler(null);
     eventChannel.setStreamHandler(null);
     binaryMessenger = null;
-//    methodChannel = null;
-//    methodHandler = null;
+    methodChannel = null;
+    methodHandler = null;
     eventChannel = null;
     eventHandler = null;
     context = null;

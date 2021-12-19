@@ -30,18 +30,13 @@ import io.flutter.Log;
 public class NotificationListener extends NotificationListenerService {
 
     private static final String TAG = ReflexPlugin.getPluginTag();
-    private static final boolean debug = ReflexPlugin.debug;
-
 
     @RequiresApi(api = VERSION_CODES.N)
     @Override
     public void onNotificationPosted(StatusBarNotification notification) {
         // Package name as title
         String packageName = notification.getPackageName();
-        if(debug)
-        {
-            Log.d(TAG,"Notification Received From: " + packageName);
-        }
+        ReflexPlugin.debugPrint("Notification Received From: " + packageName);
 
         // Extra Payload
         Bundle extras = notification.getNotification().extras;

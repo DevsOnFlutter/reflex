@@ -35,4 +35,8 @@ abstract class ReflexPlatform extends PlatformInterface {
   Stream<NotificationEvent>? get notificationStream {
     throw UnimplementedError('notificationStream has not been implemented');
   }
+
+  Future<bool> get isPermissionGranted async {
+    throw UnimplementedError('isPermissionGranted has not been implemented!');
+  }
 }
