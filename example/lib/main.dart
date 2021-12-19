@@ -97,7 +97,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ElevatedButton(
           child: const Text("Request Permission"),
-          onPressed: () async {},
+          onPressed: () async {
+            await Reflex.requestPermission();
+          },
         ),
       ],
     );

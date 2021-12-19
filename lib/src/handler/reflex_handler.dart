@@ -73,4 +73,9 @@ class ReflexHandler extends ReflexPlatform {
             false;
     return result;
   }
+
+  @override
+  Future<void> requestPermission() async {
+    await _methodChannel.invokeMethod('requestPermission');
+  }
 }

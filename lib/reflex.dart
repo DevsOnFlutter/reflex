@@ -53,4 +53,8 @@ class Reflex {
   static Future<bool> get isPermissionGranted async {
     return reflexPlatform.isPermissionGranted;
   }
+
+  static Future<void> requestPermission() async {
+    return reflexPlatform.requestPermission();
+  }
 }

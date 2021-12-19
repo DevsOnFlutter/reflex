@@ -16,13 +16,15 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        NotificationPermission notificationPermission = new NotificationPermission(ReflexPlugin.context);
+
         switch (call.method) {
             case "isPermissionGranted":
-                NotificationPermission notificationPermission = new NotificationPermission(ReflexPlugin.context);
                 boolean isPermissionGranted = notificationPermission.permissionGranted();
                 result.success(isPermissionGranted);
                 break;
-            case "requestNotificationPermission":
+            case "requestPermission":
+                notificationPermission.requestPermission();
                 break;
             case "sendReply":
                 Log.d(TAG,"Send Reply Invoked");

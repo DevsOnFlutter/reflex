@@ -39,4 +39,8 @@ abstract class ReflexPlatform extends PlatformInterface {
   Future<bool> get isPermissionGranted async {
     throw UnimplementedError('isPermissionGranted has not been implemented!');
   }
+
+  Future<void> requestPermission() async {
+    throw UnimplementedError('requestPermission has not been implemented!');
+  }
 }

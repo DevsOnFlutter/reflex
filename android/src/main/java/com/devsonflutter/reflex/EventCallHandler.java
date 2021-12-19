@@ -87,8 +87,8 @@ public class EventCallHandler implements EventChannel.StreamHandler {
 
             ReflexPlugin.debugPrint("Notification Listening Service Started...");
         } else {
-            notificationPermission.requestPermission();
             Log.e(TAG, "Failed to start notification listener; Permission not granted.");
+            Log.i(TAG,"Call requestPermission before Initialising!");
         }
     }
 }
