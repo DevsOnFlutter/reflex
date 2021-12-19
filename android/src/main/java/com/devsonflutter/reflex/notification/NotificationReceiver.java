@@ -30,9 +30,9 @@ public class NotificationReceiver extends BroadcastReceiver {
     @RequiresApi(api = VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onReceive(Context context, Intent intent) {
-        String packageName = intent.getStringExtra(ReflexNotification.NOTIFICATION_PACKAGE_NAME);
-        String title = intent.getStringExtra(ReflexNotification.NOTIFICATION_TITLE);
-        String message = intent.getStringExtra(ReflexNotification.NOTIFICATION_MESSAGE);
+        String packageName = intent.getStringExtra(NotificationUtils.NOTIFICATION_PACKAGE_NAME);
+        String title = intent.getStringExtra(NotificationUtils.NOTIFICATION_TITLE);
+        String message = intent.getStringExtra(NotificationUtils.NOTIFICATION_MESSAGE);
 
         // Sending Data from Java to Flutter
         HashMap<String, Object> data = new HashMap<>();

@@ -14,6 +14,7 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
@@ -26,31 +27,31 @@ import com.devsonflutter.reflex.notification.autoReply.AutoReply;
 import io.flutter.Log;
 
 /* Notification Listener */
-@SuppressLint("OverrideAbstract")
 @RequiresApi(api = VERSION_CODES.JELLY_BEAN_MR2)
+@SuppressLint("OverrideAbstract")
 public class NotificationListener extends NotificationListenerService {
 
-    @RequiresApi(api = VERSION_CODES.KITKAT)
+    @RequiresApi(api = VERSION_CODES.N)
     @Override
     public void onNotificationPosted(StatusBarNotification notification) {
         Log.d("[Reflex]","Notification Received!");
 
         // Package name as title
         String packageName = notification.getPackageName();
+        Log.d("[Reflex]","Notification From: " + packageName);
 
         // Extra Payload
         Bundle extras = notification.getNotification().extras;
+        Log.d("[Reflex]","Extras: " + extras.toString());
 
-        Intent intent = new Intent(ReflexNotification.NOTIFICATION_INTENT);
-        intent.putExtra(ReflexNotification.NOTIFICATION_PACKAGE_NAME, packageName);
+        Intent intent = new Intent(NotificationUtils.NOTIFICATION_INTENT);
+        intent.putExtra(NotificationUtils.NOTIFICATION_PACKAGE_NAME, packageName);
 
-        if (extras != null) {
-            CharSequence title = extras.getCharSequence(Notification.EXTRA_TITLE);
-            CharSequence text = extras.getCharSequence(Notification.EXTRA_TEXT);
+        CharSequence title = extras.getCharSequence(Notification.EXTRA_TITLE);
+        CharSequence text = extras.getCharSequence(Notification.EXTRA_TEXT);
 
-            intent.putExtra(ReflexNotification.NOTIFICATION_TITLE, title.toString());
-            intent.putExtra(ReflexNotification.NOTIFICATION_MESSAGE, text.toString());
-        }
+        intent.putExtra(NotificationUtils.NOTIFICATION_TITLE, title.toString());
+        intent.putExtra(NotificationUtils.NOTIFICATION_MESSAGE, text.toString());
 
         sendBroadcast(intent);
 

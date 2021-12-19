@@ -19,11 +19,9 @@ import androidx.annotation.RequiresApi;
 
 import com.devsonflutter.reflex.notification.NotificationListener;
 import com.devsonflutter.reflex.notification.NotificationReceiver;
-import com.devsonflutter.reflex.notification.ReflexNotification;
+import com.devsonflutter.reflex.notification.NotificationUtils;
 import com.devsonflutter.reflex.permission.NotificationPermission;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +66,7 @@ public class EventCallHandler implements EventChannel.StreamHandler {
         if (notificationPermission.permissionGranted()) {
             // Set up receiver
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ReflexNotification.NOTIFICATION_INTENT);
+            intentFilter.addAction(NotificationUtils.NOTIFICATION_INTENT);
 
             NotificationReceiver receiver = new NotificationReceiver(eventSink);
             context.registerReceiver(receiver, intentFilter);
