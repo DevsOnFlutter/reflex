@@ -27,7 +27,6 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
                 notificationPermission.requestPermission();
                 break;
             case "sendReply":
-                Log.d(TAG,"Send Reply Invoked");
                 break;
             default:
                 result.notImplemented();

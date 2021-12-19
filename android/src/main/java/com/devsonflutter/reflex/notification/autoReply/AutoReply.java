@@ -29,14 +29,14 @@ public class AutoReply {
     private static final String TAG = ReflexPlugin.getPluginTag();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void sendReply(StatusBarNotification sbn){
+    public void sendReply(StatusBarNotification sbn, String message){
         if (canReply(sbn)) {
-            reply(sbn);
+            reply(sbn,message);
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void reply(StatusBarNotification sbn) {
+    private void reply(StatusBarNotification sbn, String message) {
         NotificationWear notificationWear = NotificationUtils.extractWearNotification(sbn);
         if (notificationWear.getRemoteInputs().isEmpty()) {
             return;
@@ -51,8 +51,7 @@ public class AutoReply {
         int i = 0;
         for (RemoteInput remoteIn : notificationWear.getRemoteInputs()) {
             remoteInputs[i] = remoteIn;
-            // This works. Might need additional parameter to make it for Hangouts? (notification_tag?)
-            localBundle.putCharSequence(remoteInputs[i].getResultKey(), "[Reflex] Auto Reply");
+            localBundle.putCharSequence(remoteInputs[i].getResultKey(), message);
             i++;
         }
 

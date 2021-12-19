@@ -22,6 +22,9 @@ import androidx.annotation.RequiresApi;
 import com.devsonflutter.reflex.ReflexPlugin;
 import com.devsonflutter.reflex.notification.autoReply.AutoReply;
 
+import java.util.List;
+import java.util.Map;
+
 import io.flutter.Log;
 
 /* Notification Listener */
@@ -61,7 +64,15 @@ public class NotificationListener extends NotificationListenerService {
         // Notification Receiver listens to this broadcast
         sendBroadcast(intent);
 
-        new AutoReply(ReflexPlugin.context).sendReply(notification);
+        // Sending AutoReply
+        Map<String, Object> autoReply = ReflexPlugin.autoReply;
+        if(autoReply != null) {
+            List<String> autoReplyPackageNameList = (List<String>) autoReply.get("packageNameList");
+            assert autoReplyPackageNameList != null;
+            if(autoReplyPackageNameList.contains(packageName)) {
+                new AutoReply(ReflexPlugin.context).sendReply(notification, (String) autoReply.get("message"));
+            }
+        }
     }
 
     @Override

@@ -37,10 +37,39 @@ class ReflexHandler extends ReflexPlatform {
     List<String>? packageNameExceptionList,
     AutoReply? autoReply,
   }) {
-    // throw exception if package
+    // Check conflicting package name list and exception list
     if (packageNameList != null && packageNameExceptionList != null) {
-      ReflexUtils.checkConflictingPackageNames(
+      String? packageName = ReflexUtils.checkConflictingPackageNames(
           packageNameList, packageNameExceptionList);
+
+      if (packageName != null) {
+        throw ReflexException(
+            "Found $packageName both in packageNameList and packageNameExceptionList of Reflex!");
+      }
+    }
+
+    if (autoReply != null && autoReply.packageNameList != null) {
+      // Check if package in autoReply.packageNameList is present in packageNameList
+      if (packageNameList != null) {
+        String? packageName = ReflexUtils.checkPackagePresence(
+            packageNameList, autoReply.packageNameList ?? []);
+
+        if (packageName != null) {
+          throw ReflexException(
+              "You are not listening for $packageName, but you are using it for AutoReply!");
+        }
+      }
+
+      // Check conflicting auto reply packageNameList and packageNameExceptionList
+      if (packageNameList == null && packageNameExceptionList != null) {
+        String? packageName = ReflexUtils.checkConflictingPackageNames(
+            packageNameExceptionList, autoReply.packageNameList ?? []);
+
+        if (packageName != null) {
+          throw ReflexException(
+              "Found $packageName both in packageNameExceptionList and autoReply.packageNameList!");
+        }
+      }
     }
 
     Map<String, dynamic> map = {

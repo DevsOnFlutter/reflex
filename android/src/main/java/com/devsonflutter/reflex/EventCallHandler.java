@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi;
 import com.devsonflutter.reflex.notification.NotificationListener;
 import com.devsonflutter.reflex.notification.NotificationReceiver;
 import com.devsonflutter.reflex.notification.NotificationUtils;
+import com.devsonflutter.reflex.notification.autoReply.AutoReply;
 import com.devsonflutter.reflex.permission.NotificationPermission;
 
 import java.util.List;
@@ -53,11 +54,14 @@ public class EventCallHandler implements EventChannel.StreamHandler {
         boolean debug = Boolean.parseBoolean(String.valueOf(args.get("debug")));
         List<String> packageNameList = (List<String>) args.get("packageNameList");
         List<String> packageNameExceptionList = (List<String>) args.get("packageNameExceptionList");
-        Map<String, String> autoReply = (Map<String,String>) args.get("autoReply");
+        Map<String, Object> autoReply = (Map<String,Object>) args.get("autoReply");
 
         ReflexPlugin.debug = debug;
         ReflexPlugin.packageNameList = packageNameList;
         ReflexPlugin.packageNameExceptionList = packageNameExceptionList;
+        if(autoReply != null) {
+            ReflexPlugin.autoReply = autoReply;
+        }
 
         // Start listening notification
         listenNotification(mEventSink);

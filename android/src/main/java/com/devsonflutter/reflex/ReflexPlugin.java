@@ -17,6 +17,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.util.List;
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -69,6 +70,7 @@ public class ReflexPlugin implements FlutterPlugin {
   public static boolean debug;
   public static List<String> packageNameList;
   public static List<String> packageNameExceptionList;
+  public static Map<String,Object> autoReply = null;
   /* ------------- Flutter Variables -------------- */
 
   /* ------------- Utility Functions -------------- */

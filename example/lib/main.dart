@@ -26,8 +26,8 @@ class _MyAppState extends State<MyApp> {
     packageNameList: ["com.whatsapp", "com.tyup"],
     packageNameExceptionList: ["com.miui.securitycenter"],
     autoReply: AutoReply(
-      packageName: "com.whatsapp",
-      message: "Hello",
+      packageNameList: ["com.whatsapp"],
+      message: "[Reflex] This is an automated reply.",
     ),
   );
 
