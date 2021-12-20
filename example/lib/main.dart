@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     packageNameList: ["com.whatsapp", "com.tyup"],
     packageNameExceptionList: ["com.facebook"],
     autoReply: AutoReply(
-      // packageNameList: ["com.whatsapp"],
+      packageNameList: ["com.whatsapp"],
       message: "[Reflex] This is an automated reply.",
     ),
   );
