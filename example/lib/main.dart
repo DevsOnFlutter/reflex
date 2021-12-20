@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   Reflex reflex = Reflex(
     debug: true,
     packageNameList: ["com.whatsapp", "com.tyup"],
-    packageNameExceptionList: ["com.miui.securitycenter"],
+    packageNameExceptionList: ["com.android.systemui"],
     autoReply: AutoReply(
       packageNameList: ["com.whatsapp"],
       message: "[Reflex] This is an automated reply.",

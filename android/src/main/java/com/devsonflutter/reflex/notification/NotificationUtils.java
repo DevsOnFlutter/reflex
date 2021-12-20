@@ -22,14 +22,11 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
 import com.devsonflutter.reflex.ReflexPlugin;
-import com.devsonflutter.reflex.notification.model.App;
 import com.devsonflutter.reflex.notification.model.NotificationWear;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 public class NotificationUtils {
@@ -135,9 +132,18 @@ public class NotificationUtils {
 
     private static boolean checkListeningAndReplyPackages(String notificationPackageName,
                                                           List<String> replyPackageNameList) {
-        // TODO: check Listening and Replying PackageNames also debugPrint if necessary
-        // Use listeningPackageNameList & listeningExceptionPackageNameList
-        return true;
+        if(listeningPackageNameList == null && listeningExceptionPackageNameList == null && replyPackageNameList == null){
+            return true;
+        }else if(listeningPackageNameList == null && listeningExceptionPackageNameList == null){
+            return  replyPackageNameList.contains(notificationPackageName);
+        }
+        else if(listeningPackageNameList == null ){
+
+            return  !listeningExceptionPackageNameList.contains(notificationPackageName);
+        }
+        else {
+            return true;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
