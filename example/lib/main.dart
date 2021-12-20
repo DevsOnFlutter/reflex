@@ -81,9 +81,10 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const SizedBox(height: 20),
               notificationListener(),
-              permissions(),
               autoReply(),
+              permissions(),
             ],
           ),
         ),
@@ -101,12 +102,18 @@ class _MyAppState extends State<MyApp> {
             bool isPermissionGranted = await Reflex.isPermissionGranted;
             debugPrint("Notification Permission: $isPermissionGranted");
           },
+          style: ElevatedButton.styleFrom(
+            fixedSize: const Size(170, 8),
+          ),
         ),
         ElevatedButton(
           child: const Text("Request Permission"),
           onPressed: () async {
             await Reflex.requestPermission();
           },
+          style: ElevatedButton.styleFrom(
+            fixedSize: const Size(170, 8),
+          ),
         ),
       ],
     );
@@ -114,11 +121,11 @@ class _MyAppState extends State<MyApp> {
 
   Widget notificationListener() {
     return SizedBox(
-      height: 400,
+      height: 265,
       child: Column(
         children: [
           SizedBox(
-            height: 300,
+            height: 200,
             child: ListView.builder(
               reverse: true,
               itemCount: _notificationLogs.length,
@@ -151,22 +158,25 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               if (_notificationLogs.isNotEmpty)
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                  ),
-                  icon: const Icon(Icons.clear),
-                  label: const Text(
-                    "Clear List",
-                    style: TextStyle(
-                      color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
                     ),
+                    icon: const Icon(Icons.clear),
+                    label: const Text(
+                      "Clear List",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _notificationLogs.clear();
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _notificationLogs.clear();
-                    });
-                  },
                 ),
             ],
           ),
@@ -177,11 +187,11 @@ class _MyAppState extends State<MyApp> {
 
   Widget autoReply() {
     return SizedBox(
-      height: 400,
+      height: 265,
       child: Column(
         children: [
           SizedBox(
-            height: 300,
+            height: 200,
             child: ListView.builder(
               itemCount: _autoReplyLogs.length,
               itemBuilder: (BuildContext context, int index) {
@@ -197,22 +207,25 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           if (_autoReplyLogs.isNotEmpty)
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-              ),
-              icon: const Icon(Icons.clear),
-              label: const Text(
-                "Clear List",
-                style: TextStyle(
-                  color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
                 ),
+                icon: const Icon(Icons.clear),
+                label: const Text(
+                  "Clear List",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    _autoReplyLogs.clear();
+                  });
+                },
               ),
-              onPressed: () {
-                setState(() {
-                  _autoReplyLogs.clear();
-                });
-              },
             ),
         ],
       ),
