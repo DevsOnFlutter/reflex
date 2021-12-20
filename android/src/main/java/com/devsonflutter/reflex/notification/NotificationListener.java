@@ -19,17 +19,25 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import androidx.annotation.RequiresApi;
 
-import io.flutter.Log;
+import com.devsonflutter.reflex.ReflexPlugin;
+import com.devsonflutter.reflex.notification.autoReply.AutoReply;
+
+import java.util.Map;
 
 /* Notification Listener */
-@SuppressLint("OverrideAbstract")
 @RequiresApi(api = VERSION_CODES.JELLY_BEAN_MR2)
+@SuppressLint("OverrideAbstract")
 public class NotificationListener extends NotificationListenerService {
 
-    @RequiresApi(api = VERSION_CODES.KITKAT)
+    private static final String TAG = ReflexPlugin.getPluginTag();
+
+    @RequiresApi(api = VERSION_CODES.N)
     @Override
     public void onNotificationPosted(StatusBarNotification notification) {
-        Log.d("[Reflex]","Notification Received!");
+        // Ignore group summary notification
+        if ((notification.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
+            return;
+        }
 
         // Package name as title
         String packageName = notification.getPackageName();
@@ -37,18 +45,40 @@ public class NotificationListener extends NotificationListenerService {
         // Extra Payload
         Bundle extras = notification.getNotification().extras;
 
-        Intent intent = new Intent(ReflexNotification.NOTIFICATION_INTENT);
-        intent.putExtra(ReflexNotification.NOTIFICATION_PACKAGE_NAME, packageName);
+        Intent intent = new Intent(NotificationUtils.NOTIFICATION_INTENT);
+        intent.putExtra(NotificationUtils.NOTIFICATION_PACKAGE_NAME, packageName);
 
-        if (extras != null) {
-            CharSequence title = extras.getCharSequence(Notification.EXTRA_TITLE);
-            CharSequence text = extras.getCharSequence(Notification.EXTRA_TEXT);
+        CharSequence title = extras.getCharSequence(Notification.EXTRA_TITLE);
+        CharSequence text = extras.getCharSequence(Notification.EXTRA_TEXT);
 
-            intent.putExtra(ReflexNotification.NOTIFICATION_TITLE, title.toString());
-            intent.putExtra(ReflexNotification.NOTIFICATION_MESSAGE, text.toString());
+        if(title==null) {
+           title = "Untitled Notification";
         }
 
+        if(text == null){
+            text = "No message!";
+        }
+
+        intent.putExtra(NotificationUtils.NOTIFICATION_TITLE, title.toString());
+        intent.putExtra(NotificationUtils.NOTIFICATION_MESSAGE, text.toString());
+
+        // Notification Receiver listens to this broadcast
         sendBroadcast(intent);
+
+        // Sending AutoReply
+        if(NotificationUtils.canReply(notification))
+        {
+            final Map<String, Object> autoReply = ReflexPlugin.autoReply;
+            String message = (String) autoReply.get("message");
+            // Reply to notification
+            new AutoReply(ReflexPlugin.context).sendReply(notification, packageName, title, message);
+        }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 }
 

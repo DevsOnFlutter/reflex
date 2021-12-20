@@ -8,7 +8,11 @@ for more details.
 
 */
 
-export 'exception/reflex_exception.dart';
-export 'events/reflex_event.dart';
-export 'model/auto_reply.dart';
-export 'enums/reflex_event_type.dart';
+/// [ReflexEventType] determines type of Reflex Event
+enum ReflexEventType {
+  /// [ReflexEventType.notification] receives notification
+  notification,
+
+  /// [ReflexEventType.reply] receives auto reply event
+  reply,
+}

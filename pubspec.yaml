@@ -1,7 +1,7 @@
 name: reflex
 description: Flutter plugin for notification read & reply.
 version: 0.0.1
-homepage:
+repository: https://github.com/DevsOnFlutter/reflex
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

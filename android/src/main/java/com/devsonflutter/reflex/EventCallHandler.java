@@ -19,11 +19,9 @@ import androidx.annotation.RequiresApi;
 
 import com.devsonflutter.reflex.notification.NotificationListener;
 import com.devsonflutter.reflex.notification.NotificationReceiver;
-import com.devsonflutter.reflex.notification.ReflexNotification;
+import com.devsonflutter.reflex.notification.NotificationUtils;
 import com.devsonflutter.reflex.permission.NotificationPermission;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +30,7 @@ import io.flutter.plugin.common.EventChannel;
 
 public class EventCallHandler implements EventChannel.StreamHandler {
 
-    private EventChannel.EventSink mEventSink = null;
+    private static EventChannel.EventSink mEventSink = null;
     private final Context context;
     private final NotificationPermission notificationPermission;
 
@@ -43,24 +41,41 @@ public class EventCallHandler implements EventChannel.StreamHandler {
 
     private static final String TAG = ReflexPlugin.getPluginTag();
 
+    static public EventChannel.EventSink getEventSink() {
+        return mEventSink;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onListen(Object arguments, EventChannel.EventSink events) {
-//        List<Map<String, String>> list = (List<Map<String, String>>) arguments;
-        List<Map<String, Object>> list = (List<Map<String, Object>>) arguments;
-
-        Map<String, Object> map = (Map<String, Object>) list.get(0);
-        Map<String, String> autoReply = (Map<String,String>) map.get("autoReply");
-
         mEventSink = events;
+
+        // Get arguments from flutter side
+        List<Map<String, Object>> list = (List<Map<String, Object>>) arguments;
+        Map<String, Object> args = (Map<String, Object>) list.get(0);
+
+        boolean debug = Boolean.parseBoolean(String.valueOf(args.get("debug")));
+        List<String> packageNameList = (List<String>) args.get("packageNameList");
+        List<String> packageNameExceptionList = (List<String>) args.get("packageNameExceptionList");
+        Map<String, Object> autoReply = (Map<String,Object>) args.get("autoReply");
+
+        ReflexPlugin.debug = debug;
+        ReflexPlugin.packageNameList = packageNameList;
+        ReflexPlugin.packageNameExceptionList = packageNameExceptionList;
+        if(autoReply != null) {
+            ReflexPlugin.autoReply = autoReply;
+        }
+
+        // Start listening notification
         listenNotification(mEventSink);
-        Log.w(TAG,"Listening Reflex Stream...");
+
+        ReflexPlugin.debugPrint("Listening Reflex Stream...");
     }
 
     @Override
     public void onCancel(Object arguments) {
         mEventSink = null;
-        Log.w(TAG,"Closing Reflex Stream...");
+        ReflexPlugin.debugPrint("Closing Reflex Stream...");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -68,7 +83,7 @@ public class EventCallHandler implements EventChannel.StreamHandler {
         if (notificationPermission.permissionGranted()) {
             // Set up receiver
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ReflexNotification.NOTIFICATION_INTENT);
+            intentFilter.addAction(NotificationUtils.NOTIFICATION_INTENT);
 
             NotificationReceiver receiver = new NotificationReceiver(eventSink);
             context.registerReceiver(receiver, intentFilter);
@@ -76,10 +91,11 @@ public class EventCallHandler implements EventChannel.StreamHandler {
             // Listener intent
             Intent intent = new Intent(context, NotificationListener.class);
             context.startService(intent);
-            Log.i(TAG, "Started the notification tracking service.");
+
+            ReflexPlugin.debugPrint("Notification Listening Service Started...");
         } else {
-            notificationPermission.requestPermission();
-            Log.e(TAG, "Failed to start notification tracking; Permissions were not yet granted.");
+            Log.e(TAG, "Failed to start notification listener; Permission not granted.");
+            Log.i(TAG,"Call requestPermission before Initialising!");
         }
     }
 }

@@ -17,15 +17,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription<NotificationEvent>? _subscription;
-  final List<NotificationEvent> _notificationLogs = [];
+  StreamSubscription<ReflexEvent>? _subscription;
+  final List<ReflexEvent> _notificationLogs = [];
+  final List<ReflexEvent> _autoReplyLogs = [];
   bool isListening = false;
 
   Reflex reflex = Reflex(
     debug: true,
+    packageNameList: ["com.whatsapp", "com.tyup"],
+    packageNameExceptionList: ["com.facebook"],
     autoReply: AutoReply(
-      packageName: "com.whatsapp",
-      message: "Hello",
+      // packageNameList: ["com.whatsapp"],
+      message: "[Reflex] This is an automated reply.",
     ),
   );
 
@@ -40,9 +43,13 @@ class _MyAppState extends State<MyApp> {
     startListening();
   }
 
-  void onData(NotificationEvent event) {
+  void onData(ReflexEvent event) {
     setState(() {
-      _notificationLogs.add(event);
+      if (event.type == ReflexEventType.notification) {
+        _notificationLogs.add(event);
+      } else if (event.type == ReflexEventType.reply) {
+        _autoReplyLogs.add(event);
+      }
     });
     debugPrint(event.toString());
   }
@@ -70,28 +77,60 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Reflex Example app'),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            notificationListener(),
-            autoReply(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              notificationListener(),
+              autoReply(),
+              permissions(),
+            ],
+          ),
         ),
       ),
     );
   }
 
+  Widget permissions() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+          child: const Text("See Permission"),
+          onPressed: () async {
+            bool isPermissionGranted = await Reflex.isPermissionGranted;
+            debugPrint("Notification Permission: $isPermissionGranted");
+          },
+          style: ElevatedButton.styleFrom(
+            fixedSize: const Size(170, 8),
+          ),
+        ),
+        ElevatedButton(
+          child: const Text("Request Permission"),
+          onPressed: () async {
+            await Reflex.requestPermission();
+          },
+          style: ElevatedButton.styleFrom(
+            fixedSize: const Size(170, 8),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget notificationListener() {
     return SizedBox(
-      height: 400,
+      height: 265,
       child: Column(
         children: [
           SizedBox(
-            height: 300,
+            height: 200,
             child: ListView.builder(
+              reverse: true,
               itemCount: _notificationLogs.length,
               itemBuilder: (BuildContext context, int index) {
-                final NotificationEvent element = _notificationLogs[index];
+                final ReflexEvent element = _notificationLogs[index];
                 return ListTile(
                   title: Text(element.title ?? ""),
                   subtitle: Text(element.message ?? ""),
@@ -119,22 +158,25 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               if (_notificationLogs.isNotEmpty)
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                  ),
-                  icon: const Icon(Icons.clear),
-                  label: const Text(
-                    "Clear List",
-                    style: TextStyle(
-                      color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
                     ),
+                    icon: const Icon(Icons.clear),
+                    label: const Text(
+                      "Clear List",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _notificationLogs.clear();
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _notificationLogs.clear();
-                    });
-                  },
                 ),
             ],
           ),
@@ -144,6 +186,49 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget autoReply() {
-    return const Text("AutoReply");
+    return SizedBox(
+      height: 265,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 200,
+            child: ListView.builder(
+              itemCount: _autoReplyLogs.length,
+              itemBuilder: (BuildContext context, int index) {
+                final ReflexEvent element = _autoReplyLogs[index];
+                return ListTile(
+                  title: Text("AutoReply to: ${element.title}"),
+                  subtitle: Text(element.message ?? ""),
+                  trailing: Text(
+                    element.packageName.toString().split('.').last,
+                  ),
+                );
+              },
+            ),
+          ),
+          if (_autoReplyLogs.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                ),
+                icon: const Icon(Icons.clear),
+                label: const Text(
+                  "Clear List",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    _autoReplyLogs.clear();
+                  });
+                },
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
