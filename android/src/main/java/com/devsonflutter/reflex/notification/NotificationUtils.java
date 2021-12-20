@@ -1,3 +1,13 @@
+/*
+
+               Copyright (c) 2022 DevsOnFlutter (Devs On Flutter)
+                            All rights reserved.
+
+The plugin is governed by the BSD-3-clause License. Please see the LICENSE file
+for more details.
+
+*/
+
 package com.devsonflutter.reflex.notification;
 
 import android.app.Notification;
@@ -11,12 +21,14 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
+import com.devsonflutter.reflex.ReflexPlugin;
 import com.devsonflutter.reflex.notification.model.App;
 import com.devsonflutter.reflex.notification.model.NotificationWear;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,8 +39,11 @@ public class NotificationUtils {
     public static String NOTIFICATION_PACKAGE_NAME = "notification_package_name";
     public static String NOTIFICATION_MESSAGE = "notification_message";
     public static String NOTIFICATION_TITLE = "notification_title";
-    public static Set<App> SUPPORTED_APPS = new HashSet<App>();
 
+    private static final Map<String, Object> autoReply = ReflexPlugin.autoReply;
+
+    private static final List<String> listeningPackageNameList = ReflexPlugin.packageNameList;
+    private static final List<String> listeningExceptionPackageNameList = ReflexPlugin.packageNameExceptionList;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static NotificationWear extractWearNotification(StatusBarNotification sbn){
@@ -61,7 +76,8 @@ public class NotificationUtils {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static boolean isNewNotification(StatusBarNotification sbn) {
         return sbn.getNotification().when == 0 ||
-                (System.currentTimeMillis() - sbn.getNotification().when) < MAX_OLD_NOTIFICATION_CAN_BE_REPLIED_TIME_MS;
+                (System.currentTimeMillis() - sbn.getNotification().when)
+                        < MAX_OLD_NOTIFICATION_CAN_BE_REPLIED_TIME_MS;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -69,8 +85,7 @@ public class NotificationUtils {
         String title;
         if (sbn.getNotification().extras.getBoolean("android.isGroupConversation")) {
             title = sbn.getNotification().extras.getString("android.hiddenConversationTitle");
-            //Just to avoid null cases, if by any chance hiddenConversationTitle comes null for group message
-            // then extract group name from title
+            // Checking if title is null
             if (title == null) {
                 title = sbn.getNotification().extras.getString("android.title");
                 int index = title.indexOf(':');
@@ -79,7 +94,7 @@ public class NotificationUtils {
                 }
             }
 
-            //To eliminate the case where group title has number of messages count in it
+            // Eliminate message count in groups
             Parcelable[] b = (Parcelable[]) sbn.getNotification().extras.get("android.messages");
             if (b != null && b.length > 1) {
                 int startIndex = title.lastIndexOf('(');
@@ -96,5 +111,44 @@ public class NotificationUtils {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getTitleRaw(StatusBarNotification sbn) {
         return sbn.getNotification().extras.getString("android.title");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    static boolean canReply(StatusBarNotification notification) {
+        String notificationPackageName = notification.getPackageName();
+
+        boolean isServiceEnabled = false;
+        List<String> autoReplyPackageNameList = null;
+
+        if(autoReply != null) {
+            isServiceEnabled = true;
+            autoReplyPackageNameList = (List<String>) autoReply.get("packageNameList");
+        }
+
+        // If AutoReply object coming from flutter side is null, AutoReply feature is disabled
+        if (!isServiceEnabled) return false;
+
+        return isSupportedPackage(notificationPackageName,autoReplyPackageNameList) &&
+                checkListeningAndReplyPackages(notificationPackageName,autoReplyPackageNameList) &&
+                NotificationUtils.isNewNotification(notification);
+    }
+
+    private static boolean checkListeningAndReplyPackages(String notificationPackageName,
+                                                          List<String> replyPackageNameList) {
+        // TODO: check Listening and Replying PackageNames also debugPrint if necessary
+        // Use listeningPackageNameList & listeningExceptionPackageNameList
+        return true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private static boolean isSupportedPackage(String notificationPackageName, List<String> packageList) {
+        // If packageNameList coming from flutter is null,
+        // then AutoReply is enabled for all packageNames
+        if(packageList == null) {
+            return true;
+        }
+
+        // Check notification's package name contained in AutoReply's PackageNameList
+        return packageList.contains(notificationPackageName);
     }
 }

@@ -20,7 +20,6 @@ import androidx.annotation.RequiresApi;
 import com.devsonflutter.reflex.notification.NotificationListener;
 import com.devsonflutter.reflex.notification.NotificationReceiver;
 import com.devsonflutter.reflex.notification.NotificationUtils;
-import com.devsonflutter.reflex.notification.autoReply.AutoReply;
 import com.devsonflutter.reflex.permission.NotificationPermission;
 
 import java.util.List;

@@ -2,7 +2,7 @@
 
 Flutter plugin for notification read & reply.
 
-<img src="https://i.imgur.com/462Y6wf.gif" title="Flutter_Shortcuts"/>
+<img src="https://i.imgur.com/kz6uoXm.png" title="Flutter_Shortcuts"/>
 
 ![GitHub](https://img.shields.io/github/license/DevsOnFlutter/reflex?style=plastic) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/DevsOnFlutter/reflex?style=plastic) ![GitHub top language](https://img.shields.io/github/languages/top/DevsOnFlutter/reflex?style=plastic) ![GitHub language count](https://img.shields.io/github/languages/count/DevsOnFlutter/reflex?style=plastic) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/DevsOnFlutter/reflex?style=plastic) ![GitHub issues](https://img.shields.io/github/issues/DevsOnFlutter/reflex?style=plastic) ![GitHub Repo stars](https://img.shields.io/github/stars/DevsOnFlutter/reflex?style=social) ![GitHub forks](https://img.shields.io/github/forks/DevsOnFlutter/reflex?style=social)
 

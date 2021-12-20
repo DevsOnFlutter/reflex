@@ -19,16 +19,10 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import androidx.annotation.RequiresApi;
 
-import com.devsonflutter.reflex.EventCallHandler;
 import com.devsonflutter.reflex.ReflexPlugin;
 import com.devsonflutter.reflex.notification.autoReply.AutoReply;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import io.flutter.Log;
-import io.flutter.plugin.common.EventChannel;
 
 /* Notification Listener */
 @RequiresApi(api = VERSION_CODES.JELLY_BEAN_MR2)
@@ -36,6 +30,7 @@ import io.flutter.plugin.common.EventChannel;
 public class NotificationListener extends NotificationListenerService {
 
     private static final String TAG = ReflexPlugin.getPluginTag();
+    private final Map<String, Object> autoReply = ReflexPlugin.autoReply;
 
     @RequiresApi(api = VERSION_CODES.N)
     @Override
@@ -73,15 +68,11 @@ public class NotificationListener extends NotificationListenerService {
         sendBroadcast(intent);
 
         // Sending AutoReply
-        Map<String, Object> autoReply = ReflexPlugin.autoReply;
-        if(autoReply != null) {
-            List<String> autoReplyPackageNameList = (List<String>) autoReply.get("packageNameList");
+        if(NotificationUtils.canReply(notification))
+        {
             String message = (String) autoReply.get("message");
-            assert autoReplyPackageNameList != null;
-            if(autoReplyPackageNameList.contains(packageName)) {
-                // Reply to notification
-                new AutoReply(ReflexPlugin.context).sendReply(notification, packageName, title, message);
-            }
+            // Reply to notification
+            new AutoReply(ReflexPlugin.context).sendReply(notification, packageName, title, message);
         }
     }
 
