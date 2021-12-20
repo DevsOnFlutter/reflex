@@ -40,6 +40,11 @@ public class NotificationListener extends NotificationListenerService {
     @RequiresApi(api = VERSION_CODES.N)
     @Override
     public void onNotificationPosted(StatusBarNotification notification) {
+        // Ignore group summary notification
+        if ((notification.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
+            return;
+        }
+
         // Package name as title
         String packageName = notification.getPackageName();
         ReflexPlugin.debugPrint("Notification Received From: " + packageName);
