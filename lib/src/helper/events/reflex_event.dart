@@ -8,13 +8,19 @@ for more details.
 
 */
 
-class NotificationEvent {
-  NotificationEvent({
+import 'package:reflex/src/helper/helper.dart';
+
+class ReflexEvent {
+  ReflexEvent({
+    this.type,
     this.packageName,
     this.title,
     this.message,
     this.timeStamp,
   });
+
+  /// Event type Notification/Reply
+  ReflexEventType? type;
 
   /// The package name of the app that sent the notification.
   String? packageName;
@@ -28,13 +34,22 @@ class NotificationEvent {
   /// The time stamp of the notification.
   DateTime? timeStamp;
 
-  factory NotificationEvent.fromMap(Map<dynamic, dynamic> map) {
+  factory ReflexEvent.fromMap(Map<dynamic, dynamic> map) {
     DateTime time = DateTime.now();
     String? name = map['packageName'];
     String? message = map['message'];
     String? title = map['title'];
 
-    return NotificationEvent(
+    ReflexEventType? type;
+
+    if (map['type'] == 'notification') {
+      type = ReflexEventType.notification;
+    } else if (map['type'] == 'reply') {
+      type = ReflexEventType.reply;
+    }
+
+    return ReflexEvent(
+      type: type,
       packageName: name,
       title: title,
       message: message,
@@ -42,13 +57,14 @@ class NotificationEvent {
     );
   }
 
-  static NotificationEvent getNotificationEventFromMap(dynamic data) {
-    return NotificationEvent.fromMap(data);
+  static ReflexEvent getReflexEventFromMap(dynamic data) {
+    return ReflexEvent.fromMap(data);
   }
 
   @override
   String toString() {
     return '''$runtimeType
+    type: $type,
     Package Name: $packageName, 
     Title: $title, 
     Message: $message, 

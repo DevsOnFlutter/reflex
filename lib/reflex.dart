@@ -10,7 +10,7 @@ for more details.
 
 import 'dart:async';
 
-import 'package:reflex/src/helper/events/notification_event.dart';
+import 'package:reflex/src/helper/events/reflex_event.dart';
 import 'package:reflex/src/helper/helper.dart';
 import 'package:reflex/src/platform/reflex_platform.dart';
 
@@ -46,7 +46,7 @@ class Reflex {
   }
 
   /// [notificationStream] returns stream of notifications.
-  Stream<NotificationEvent>? get notificationStream {
+  Stream<ReflexEvent>? get notificationStream {
     return reflexPlatform.notificationStream;
   }
 

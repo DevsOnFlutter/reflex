@@ -31,7 +31,7 @@ import io.flutter.plugin.common.EventChannel;
 
 public class EventCallHandler implements EventChannel.StreamHandler {
 
-    private EventChannel.EventSink mEventSink = null;
+    private static EventChannel.EventSink mEventSink = null;
     private final Context context;
     private final NotificationPermission notificationPermission;
 
@@ -41,6 +41,10 @@ public class EventCallHandler implements EventChannel.StreamHandler {
     }
 
     private static final String TAG = ReflexPlugin.getPluginTag();
+
+    static public EventChannel.EventSink getEventSink() {
+        return mEventSink;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override

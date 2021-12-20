@@ -17,8 +17,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription<NotificationEvent>? _subscription;
-  final List<NotificationEvent> _notificationLogs = [];
+  StreamSubscription<ReflexEvent>? _subscription;
+  final List<ReflexEvent> _notificationLogs = [];
+  final List<ReflexEvent> _autoReplyLogs = [];
   bool isListening = false;
 
   Reflex reflex = Reflex(
@@ -42,9 +43,13 @@ class _MyAppState extends State<MyApp> {
     startListening();
   }
 
-  void onData(NotificationEvent event) {
+  void onData(ReflexEvent event) {
     setState(() {
-      _notificationLogs.add(event);
+      if (event.type == ReflexEventType.notification) {
+        _notificationLogs.add(event);
+      } else if (event.type == ReflexEventType.reply) {
+        _autoReplyLogs.add(event);
+      }
     });
     debugPrint(event.toString());
   }
@@ -72,13 +77,15 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Reflex Example app'),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            notificationListener(),
-            permissions(),
-            autoReply(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              notificationListener(),
+              permissions(),
+              autoReply(),
+            ],
+          ),
         ),
       ),
     );
@@ -115,7 +122,7 @@ class _MyAppState extends State<MyApp> {
             child: ListView.builder(
               itemCount: _notificationLogs.length,
               itemBuilder: (BuildContext context, int index) {
-                final NotificationEvent element = _notificationLogs[index];
+                final ReflexEvent element = _notificationLogs[index];
                 return ListTile(
                   title: Text(element.title ?? ""),
                   subtitle: Text(element.message ?? ""),
@@ -168,6 +175,46 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget autoReply() {
-    return const Text("AutoReply");
+    return SizedBox(
+      height: 400,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 300,
+            child: ListView.builder(
+              itemCount: _autoReplyLogs.length,
+              itemBuilder: (BuildContext context, int index) {
+                final ReflexEvent element = _autoReplyLogs[index];
+                return ListTile(
+                  title: Text("AutoReply to: ${element.title}"),
+                  subtitle: Text(element.message ?? ""),
+                  trailing: Text(
+                    element.packageName.toString().split('.').last,
+                  ),
+                );
+              },
+            ),
+          ),
+          if (_autoReplyLogs.isNotEmpty)
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+              ),
+              icon: const Icon(Icons.clear),
+              label: const Text(
+                "Clear List",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  _autoReplyLogs.clear();
+                });
+              },
+            ),
+        ],
+      ),
+    );
   }
 }

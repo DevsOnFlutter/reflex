@@ -10,7 +10,7 @@ for more details.
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:reflex/src/handler/reflex_handler.dart';
-import 'package:reflex/src/helper/events/notification_event.dart';
+import 'package:reflex/src/helper/events/reflex_event.dart';
 import 'package:reflex/src/helper/helper.dart';
 
 abstract class ReflexPlatform extends PlatformInterface {
@@ -32,7 +32,7 @@ abstract class ReflexPlatform extends PlatformInterface {
     throw UnimplementedError('init has not been implemented for reflex.');
   }
 
-  Stream<NotificationEvent>? get notificationStream {
+  Stream<ReflexEvent>? get notificationStream {
     throw UnimplementedError('notificationStream has not been implemented');
   }
 

@@ -38,12 +38,6 @@ public class NotificationReceiver extends BroadcastReceiver {
         String title = intent.getStringExtra(NotificationUtils.NOTIFICATION_TITLE);
         String message = intent.getStringExtra(NotificationUtils.NOTIFICATION_MESSAGE);
 
-        // Sending Data from Java to Flutter
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("packageName", packageName);
-        data.put("title", title);
-        data.put("message", message);
-
         boolean sendData = false;
 
         List<String> packageNameList = ReflexPlugin.packageNameList;
@@ -62,6 +56,13 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
 
         if(sendData) {
+            // Sending Data from Java to Flutter
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("type", "notification");
+            data.put("packageName", packageName);
+            data.put("title", title);
+            data.put("message", message);
+
             eventSink.success(data);
         }
     }

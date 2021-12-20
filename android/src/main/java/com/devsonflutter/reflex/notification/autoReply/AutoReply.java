@@ -14,9 +14,14 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.RemoteInput;
 
+import com.devsonflutter.reflex.EventCallHandler;
 import com.devsonflutter.reflex.ReflexPlugin;
 import com.devsonflutter.reflex.notification.NotificationUtils;
 import com.devsonflutter.reflex.notification.model.NotificationWear;
+
+import java.util.HashMap;
+
+import io.flutter.plugin.common.EventChannel;
 
 public class AutoReply {
 
@@ -29,15 +34,16 @@ public class AutoReply {
     private static final String TAG = ReflexPlugin.getPluginTag();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void sendReply(StatusBarNotification sbn, String message){
+    public void sendReply(StatusBarNotification sbn, String packageName, CharSequence title,String message){
         if (canReply(sbn)) {
-            reply(sbn,message);
+            reply(sbn,packageName, title, message);
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void reply(StatusBarNotification sbn, String message) {
+    private void reply(StatusBarNotification sbn, String packageName, CharSequence title,String message) {
         NotificationWear notificationWear = NotificationUtils.extractWearNotification(sbn);
+
         if (notificationWear.getRemoteInputs().isEmpty()) {
             return;
         }
@@ -61,6 +67,16 @@ public class AutoReply {
             if (notificationWear.getPendingIntent() != null) {
                 notificationWear.getPendingIntent().send(context, 0, localIntent);
                 ReflexPlugin.debugPrint("Auto Reply Sent Successfully...");
+
+                // Sending Reply Data from Java to Flutter
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("type", "reply");
+                data.put("packageName", packageName);
+                data.put("title", title);
+                data.put("message", message);
+
+                EventChannel.EventSink eventSink = EventCallHandler.getEventSink();
+                eventSink.success(data);
             }
         } catch (PendingIntent.CanceledException e) {
             Log.e(TAG, "PendingIntent.CanceledException: " + e.getMessage());
