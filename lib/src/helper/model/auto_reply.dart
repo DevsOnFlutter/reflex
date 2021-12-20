@@ -8,6 +8,8 @@ for more details.
 
 */
 
+import 'package:reflex/src/helper/exception/reflex_exception.dart';
+
 class AutoReply {
   AutoReply({
     this.packageNameList,
@@ -23,8 +25,7 @@ class AutoReply {
   factory AutoReply.fromMap(Map<dynamic, dynamic> map) {
     // Error Handling if map does not contain package name or message
     if (!map.containsKey('message')) {
-      // TODO: Create own exception
-      throw Exception('AutoReply do not contain message!');
+      throw ReflexException('AutoReply message field cannot be empty!');
     }
 
     List<String>? packageNameList =
