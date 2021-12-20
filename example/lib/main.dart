@@ -120,6 +120,7 @@ class _MyAppState extends State<MyApp> {
           SizedBox(
             height: 300,
             child: ListView.builder(
+              reverse: true,
               itemCount: _notificationLogs.length,
               itemBuilder: (BuildContext context, int index) {
                 final ReflexEvent element = _notificationLogs[index];
