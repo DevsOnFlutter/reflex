@@ -37,8 +37,6 @@ public class NotificationUtils {
     public static String NOTIFICATION_MESSAGE = "notification_message";
     public static String NOTIFICATION_TITLE = "notification_title";
 
-    private static final Map<String, Object> autoReply = ReflexPlugin.autoReply;
-
     private static final List<String> listeningPackageNameList = ReflexPlugin.packageNameList;
     private static final List<String> listeningExceptionPackageNameList = ReflexPlugin.packageNameExceptionList;
 
@@ -114,47 +112,50 @@ public class NotificationUtils {
     static boolean canReply(StatusBarNotification notification) {
         String notificationPackageName = notification.getPackageName();
 
-        boolean isServiceEnabled = false;
         List<String> autoReplyPackageNameList = null;
 
+        final Map<String, Object> autoReply = ReflexPlugin.autoReply;
+
         if(autoReply != null) {
-            isServiceEnabled = true;
+
             autoReplyPackageNameList = (List<String>) autoReply.get("packageNameList");
+
+            return isSupportedPackage(notificationPackageName,autoReplyPackageNameList) &&
+                    checkListeningAndReplyPackages(notificationPackageName,autoReplyPackageNameList) &&
+                    NotificationUtils.isNewNotification(notification);
         }
 
         // If AutoReply object coming from flutter side is null, AutoReply feature is disabled
-        if (!isServiceEnabled) return false;
-
-        return isSupportedPackage(notificationPackageName,autoReplyPackageNameList) &&
-                checkListeningAndReplyPackages(notificationPackageName,autoReplyPackageNameList) &&
-                NotificationUtils.isNewNotification(notification);
+        return false;
     }
 
     private static boolean checkListeningAndReplyPackages(String notificationPackageName,
                                                           List<String> replyPackageNameList) {
-        if(listeningPackageNameList == null && listeningExceptionPackageNameList == null && replyPackageNameList == null){
-            return true;
-        }else if(listeningPackageNameList == null && listeningExceptionPackageNameList == null){
-            return  replyPackageNameList.contains(notificationPackageName);
-        }
-        else if(listeningPackageNameList == null ){
 
-            return  !listeningExceptionPackageNameList.contains(notificationPackageName);
-        }
-        else {
+        if (listeningPackageNameList == null && listeningExceptionPackageNameList == null &&
+                replyPackageNameList == null) {
             return true;
+        } else if (listeningExceptionPackageNameList == null && listeningPackageNameList == null) {
+            return replyPackageNameList.contains(notificationPackageName);
+        } else if (listeningPackageNameList == null && replyPackageNameList == null) {
+            return !listeningExceptionPackageNameList.contains(notificationPackageName);
+        } else if (listeningPackageNameList == null) {
+            return replyPackageNameList.contains(notificationPackageName);
         }
+
+        return listeningPackageNameList.contains(notificationPackageName);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private static boolean isSupportedPackage(String notificationPackageName, List<String> packageList) {
+    private static boolean isSupportedPackage(String notificationPackageName,
+                                              List<String> replyPackageNameList) {
         // If packageNameList coming from flutter is null,
         // then AutoReply is enabled for all packageNames
-        if(packageList == null) {
+        if(replyPackageNameList == null) {
             return true;
         }
 
         // Check notification's package name contained in AutoReply's PackageNameList
-        return packageList.contains(notificationPackageName);
+        return replyPackageNameList.contains(notificationPackageName);
     }
 }

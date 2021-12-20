@@ -63,6 +63,8 @@ public class NotificationReceiver extends BroadcastReceiver {
             data.put("title", title);
             data.put("message", message);
 
+            ReflexPlugin.debugPrint("Notification Received From: " + packageName);
+
             eventSink.success(data);
         }
     }

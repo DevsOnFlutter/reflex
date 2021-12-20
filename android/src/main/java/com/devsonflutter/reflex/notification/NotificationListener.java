@@ -30,7 +30,6 @@ import java.util.Map;
 public class NotificationListener extends NotificationListenerService {
 
     private static final String TAG = ReflexPlugin.getPluginTag();
-    private final Map<String, Object> autoReply = ReflexPlugin.autoReply;
 
     @RequiresApi(api = VERSION_CODES.N)
     @Override
@@ -42,7 +41,6 @@ public class NotificationListener extends NotificationListenerService {
 
         // Package name as title
         String packageName = notification.getPackageName();
-        ReflexPlugin.debugPrint("Notification Received From: " + packageName);
 
         // Extra Payload
         Bundle extras = notification.getNotification().extras;
@@ -70,6 +68,7 @@ public class NotificationListener extends NotificationListenerService {
         // Sending AutoReply
         if(NotificationUtils.canReply(notification))
         {
+            final Map<String, Object> autoReply = ReflexPlugin.autoReply;
             String message = (String) autoReply.get("message");
             // Reply to notification
             new AutoReply(ReflexPlugin.context).sendReply(notification, packageName, title, message);
