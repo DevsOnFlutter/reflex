@@ -14,10 +14,10 @@ class AutoReply {
     required this.message,
   });
 
-  /// Package Name List for [AutoReply]
+  /// Package Name List to send automated reply
   List<String>? packageNameList;
 
-  /// Notification Message
+  /// Automated message to send for [AutoReply]
   String message;
 
   factory AutoReply.fromMap(Map<dynamic, dynamic> map) {

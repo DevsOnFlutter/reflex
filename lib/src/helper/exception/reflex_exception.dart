@@ -8,6 +8,7 @@ for more details.
 
 */
 
+/// Exception thrown by Reflex plugin
 class ReflexException implements Exception {
   String message;
 

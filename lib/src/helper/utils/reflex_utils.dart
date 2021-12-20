@@ -1,4 +1,12 @@
-import 'package:reflex/src/helper/exception/reflex_exception.dart';
+/* 
+
+                Copyright (c) 2022 DevsOnFlutter (Devs On Flutter)
+                            All rights reserved.
+
+The plugin is governed by the BSD-3-clause License. Please see the LICENSE file
+for more details.
+
+*/
 
 class ReflexUtils {
   ReflexUtils._();
@@ -19,7 +27,6 @@ class ReflexUtils {
     for (String packageName in list2) {
       if (!list1.contains(packageName)) {
         return packageName;
-        
       }
     }
   }

@@ -22,13 +22,13 @@ class ReflexEvent {
   /// Event type Notification/Reply
   ReflexEventType? type;
 
-  /// The package name of the app that sent the notification.
+  /// Receiving notification/sending reply package name
   String? packageName;
 
-  /// Notification Title
+  /// Notification/AutoReply Title
   String? title;
 
-  /// Notification Message
+  /// Notification/AutoReply Message
   String? message;
 
   /// The time stamp of the notification.

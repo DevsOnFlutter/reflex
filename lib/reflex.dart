@@ -17,7 +17,6 @@ import 'package:reflex/src/platform/reflex_platform.dart';
 export 'package:reflex/src/helper/helper.dart';
 
 class Reflex {
-  /// [Reflex] Constructor
   Reflex({
     this.debug = true,
     this.packageNameList,
@@ -28,10 +27,18 @@ class Reflex {
   }
 
   /// [debug] logs on the terminal.
+  /// debug is set to `true` by default.
   final bool debug;
+
+  /// [autoReply] if not null, the plugin will send an automated reply to listening apps.
   final AutoReply? autoReply;
+
+  /// [pacakgeNameList] list of package names to listen for notifications.
   final List<String>? packageNameList;
+
+  /// [packageNameExceptionList] list of package names to avoid listening for notifications.
   final List<String>? packageNameExceptionList;
+
   static late final ReflexPlatform reflexPlatform;
 
   // Initialize [ReflexPlatform] with [debug] and [autoReply]
