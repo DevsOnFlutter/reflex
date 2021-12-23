@@ -8,39 +8,39 @@ for more details.
 
 */
 
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:reflex/src/handler/reflex_handler.dart';
-import 'package:reflex/src/helper/events/reflex_event.dart';
-import 'package:reflex/src/helper/helper.dart';
+// import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+// import 'package:reflex/src/handler/reflex_handler.dart';
+// import 'package:reflex/src/helper/events/reflex_event.dart';
+// import 'package:reflex/src/helper/helper.dart';
 
-abstract class ReflexPlatform extends PlatformInterface {
-  ReflexPlatform() : super(token: _token);
+// abstract class ReflexPlatform extends PlatformInterface {
+//   ReflexPlatform() : super(token: _token);
 
-  static final Object _token = Object();
+//   static final Object _token = Object();
 
-  static final ReflexPlatform _instance = ReflexHandler();
+//   // final ReflexPlatform _instance = ReflexHandler();
 
-  /// returns the instance of the [ReflexHandler].
-  static ReflexPlatform get instance => _instance;
+//   /// returns the instance of the [ReflexHandler].
+//   static ReflexPlatform get instance => ReflexHandler();
 
-  void init({
-    required bool debug,
-    List<String>? packageNameList,
-    List<String>? packageNameExceptionList,
-    AutoReply? autoReply,
-  }) {
-    throw UnimplementedError('init has not been implemented for reflex.');
-  }
+//   void init({
+//     required bool debug,
+//     List<String>? packageNameList,
+//     List<String>? packageNameExceptionList,
+//     AutoReply? autoReply,
+//   }) {
+//     throw UnimplementedError('init has not been implemented for reflex.');
+//   }
 
-  Stream<ReflexEvent>? get notificationStream {
-    throw UnimplementedError('notificationStream has not been implemented');
-  }
+//   Stream<ReflexEvent>? get notificationStream {
+//     throw UnimplementedError('notificationStream has not been implemented');
+//   }
 
-  Future<bool> get isPermissionGranted async {
-    throw UnimplementedError('isPermissionGranted has not been implemented!');
-  }
+//   Future<bool> get isPermissionGranted async {
+//     throw UnimplementedError('isPermissionGranted has not been implemented!');
+//   }
 
-  Future<void> requestPermission() async {
-    throw UnimplementedError('requestPermission has not been implemented!');
-  }
-}
+//   Future<void> requestPermission() async {
+//     throw UnimplementedError('requestPermission has not been implemented!');
+//   }
+// }

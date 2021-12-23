@@ -22,16 +22,6 @@ class _MyAppState extends State<MyApp> {
   final List<ReflexEvent> _autoReplyLogs = [];
   bool isListening = false;
 
-  Reflex reflex = Reflex(
-    debug: true,
-    packageNameList: ["com.whatsapp", "com.tyup"],
-    packageNameExceptionList: ["com.facebook"],
-    autoReply: AutoReply(
-      packageNameList: ["com.whatsapp"],
-      message: "[Reflex] This is an automated reply.",
-    ),
-  );
-
   @override
   void initState() {
     super.initState();
@@ -56,6 +46,15 @@ class _MyAppState extends State<MyApp> {
 
   void startListening() {
     try {
+      Reflex reflex = Reflex(
+        debug: true,
+        packageNameList: ["com.whatsapp", "com.tyup"],
+        packageNameExceptionList: ["com.facebook"],
+        autoReply: AutoReply(
+          packageNameList: ["com.whatsapp"],
+          message: "[Reflex] This is an automated reply.",
+        ),
+      );
       _subscription = reflex.notificationStream!.listen(onData);
       setState(() {
         isListening = true;

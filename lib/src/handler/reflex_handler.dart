@@ -15,9 +15,9 @@ import 'package:reflex/src/helper/events/reflex_event.dart';
 import 'package:reflex/src/helper/exception/reflex_exception.dart';
 import 'package:reflex/src/helper/helper.dart';
 import 'package:reflex/src/helper/utils/reflex_utils.dart';
-import 'package:reflex/src/platform/reflex_platform.dart';
+// import 'package:reflex/src/platform/reflex_platform.dart';
 
-class ReflexHandler extends ReflexPlatform {
+class ReflexHandler {
   static const MethodChannel _methodChannel =
       MethodChannel('reflex_method_channel');
 
@@ -30,7 +30,6 @@ class ReflexHandler extends ReflexPlatform {
 
   late final List<dynamic> arguments;
 
-  @override
   void init({
     required bool debug,
     List<String>? packageNameList,
@@ -82,7 +81,6 @@ class ReflexHandler extends ReflexPlatform {
     arguments = [map];
   }
 
-  @override
   Stream<ReflexEvent>? get notificationStream {
     if (Platform.isAndroid) {
       _notificationStream ??=
@@ -94,7 +92,6 @@ class ReflexHandler extends ReflexPlatform {
     throw ReflexException('notificationStream is only supported on Android!');
   }
 
-  @override
   Future<bool> get isPermissionGranted async {
     bool? result =
         (await _methodChannel.invokeMethod<bool>('isPermissionGranted')) ??
@@ -102,7 +99,6 @@ class ReflexHandler extends ReflexPlatform {
     return result;
   }
 
-  @override
   Future<void> requestPermission() async {
     await _methodChannel.invokeMethod('requestPermission');
   }
