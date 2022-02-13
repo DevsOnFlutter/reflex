@@ -10,9 +10,10 @@ for more details.
 
 import 'dart:async';
 
+import 'package:reflex/src/handler/reflex_handler.dart';
 import 'package:reflex/src/helper/events/reflex_event.dart';
 import 'package:reflex/src/helper/helper.dart';
-import 'package:reflex/src/platform/reflex_platform.dart';
+// import 'package:reflex/src/platform/reflex_platform.dart';
 
 export 'package:reflex/src/helper/helper.dart';
 
@@ -39,12 +40,12 @@ class Reflex {
   /// [packageNameExceptionList] list of package names to avoid listening for notifications.
   final List<String>? packageNameExceptionList;
 
-  static late final ReflexPlatform reflexPlatform;
+  static late ReflexHandler reflexHandler;
 
-  // Initialize [ReflexPlatform] with [debug] and [autoReply]
+  // Initialize [ReflexHandler] with [debug] and [autoReply]
   void init() {
-    reflexPlatform = ReflexPlatform.instance;
-    reflexPlatform.init(
+    reflexHandler = ReflexHandler();
+    reflexHandler.init(
       debug: debug,
       packageNameList: packageNameList,
       packageNameExceptionList: packageNameExceptionList,
@@ -54,14 +55,14 @@ class Reflex {
 
   /// [notificationStream] returns stream of notifications.
   Stream<ReflexEvent>? get notificationStream {
-    return reflexPlatform.notificationStream;
+    return reflexHandler.notificationStream;
   }
 
   static Future<bool> get isPermissionGranted async {
-    return reflexPlatform.isPermissionGranted;
+    return reflexHandler.isPermissionGranted;
   }
 
   static Future<void> requestPermission() async {
-    return reflexPlatform.requestPermission();
+    return reflexHandler.requestPermission();
   }
 }
